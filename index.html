@@ -1489,12 +1489,9 @@ function toggleTryPanel(wrapper, pre, id) {
   // Create panel
   panel = document.createElement('div');
   panel.className = 'try-panel open';
-  // Strip type annotations for JS execution
   const raw = pre.textContent;
-  const clean = raw.replace(/:\s*(string|number|boolean|void|any|unknown|User\[\]|User|Product|string\[\]|number\[\])\b/g, '')
-    .replace(/<[A-Za-z\[\],\s]+>/g, '');
   panel.innerHTML = '<div class="try-panel-header"><span>Your Code</span><div><button onclick="runTryCode(this)">Run</button> <button onclick="clearTryOutput(this)">Clear</button></div></div>'
-    + '<textarea class="try-editor" spellcheck="false">' + escHtml(clean) + '</textarea>'
+    + '<textarea class="try-editor" spellcheck="false">' + escHtml(raw) + '</textarea>'
     + '<div class="try-output">// output appears here</div>';
   wrapper.appendChild(panel);
   // Handle tab key in textarea
@@ -1511,9 +1508,28 @@ function toggleTryPanel(wrapper, pre, id) {
 
 function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+function stripTS(code) {
+  return code
+    // Remove type annotations after : (e.g. `: string`, `: number[]`, `: Map<string, number>`)
+    .replace(/:\s*[A-Za-z_][\w<>\[\],\s|&]*(?=\s*[=;,)\]\n\r{])/g, '')
+    // Remove generic type params on functions/classes (e.g. `<T>`, `<T, U>`)
+    .replace(/(<\s*[A-Z][\w,\s]*>)(?=\s*[\(\{])/g, '')
+    // Remove `as Type` casts
+    .replace(/\bas\s+[A-Za-z_][\w<>\[\]|&]*/g, '')
+    // Remove access modifiers
+    .replace(/\b(public|private|protected|readonly)\s+/g, '')
+    // Remove implements/extends type lists on classes (keep class name)
+    .replace(/implements\s+[\w,\s<>]+(?=\s*\{)/g, '')
+    // Remove interface/type declarations entirely
+    .replace(/^(interface|type)\s+[\s\S]*?^\}/gm, '// (type removed)')
+    // Remove `!` non-null assertions
+    .replace(/!\./g, '.')
+    .replace(/!;/g, ';');
+}
+
 function runTryCode(btn) {
   const panel = btn.closest('.try-panel');
-  const code = panel.querySelector('.try-editor').value;
+  const code = stripTS(panel.querySelector('.try-editor').value);
   const output = panel.querySelector('.try-output');
   const logs = [];
   const origLog = console.log;
