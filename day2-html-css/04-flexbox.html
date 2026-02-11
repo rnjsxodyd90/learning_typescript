@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================================
+  FILE: 04-flexbox.html
+  WHAT YOU'LL LEARN: How to arrange elements in rows and columns using Flexbox.
+
+  WHY THIS MATTERS:
+    Before Flexbox, centering a div was a nightmare. Seriously.
+    Flexbox makes layout EASY. Almost every modern website uses it.
+    Angular Material and most UI frameworks are built on Flexbox.
+
+    Think of Flexbox as putting items on a shelf:
+    - The shelf is the CONTAINER (the parent element with display: flex)
+    - The items on the shelf are the CHILDREN (flex items)
+    - You can decide: left-to-right? centered? spaced out? stacked vertically?
+  ==========================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04 - Flexbox Layout</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      color: #FF5722;
+      border-bottom: 3px solid #FF5722;
+      padding-bottom: 10px;
+    }
+
+    .example-section {
+      background-color: #fff;
+      border: 2px solid #FF5722;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .example-section h3 {
+      color: #FF5722;
+      margin-top: 0;
+    }
+
+    .note {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 10px 15px;
+      margin: 15px 0;
+    }
+
+    code {
+      background-color: #e8e8e8;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+
+    hr {
+      border: none;
+      border-top: 2px solid #ddd;
+      margin: 30px 0;
+    }
+
+    /* ============================================================ */
+    /* FLEX DEMO ITEMS - the colored boxes you'll see in examples   */
+    /* ============================================================ */
+
+    .flex-item {
+      /*
+        These are the CHILDREN (items on the shelf).
+        They have colors and padding so you can SEE them clearly.
+      */
+      padding: 15px 25px;
+      color: white;
+      font-weight: bold;
+      border-radius: 5px;
+      text-align: center;
+      font-size: 16px;
+    }
+
+    .item-1 { background-color: #f44336; }  /* Red */
+    .item-2 { background-color: #2196F3; }  /* Blue */
+    .item-3 { background-color: #4CAF50; }  /* Green */
+    .item-4 { background-color: #FF9800; }  /* Orange */
+    .item-5 { background-color: #9C27B0; }  /* Purple */
+
+    /* Container styling for demos */
+    .flex-demo {
+      border: 3px dashed #ccc;
+      padding: 10px;
+      margin: 15px 0;
+      border-radius: 5px;
+      background-color: #fafafa;
+      min-height: 60px;
+    }
+
+    .label {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 5px;
+      font-family: "Courier New", monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Lesson 4: Flexbox Layout</h1>
+  <p>Flexbox is the modern way to arrange elements on a page. It lets you put things
+  in rows, columns, center them, space them out -- all easily.</p>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- WHAT IS FLEXBOX?                                                -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>What is Flexbox?</h3>
+
+    <p>Imagine you have a <strong>shelf</strong> and you're placing <strong>books</strong> on it.</p>
+    <ul>
+      <li>The <strong>shelf</strong> is the PARENT container (the element with <code>display: flex</code>)</li>
+      <li>The <strong>books</strong> are the CHILDREN (the elements inside the container)</li>
+    </ul>
+
+    <p>Flexbox lets you control:</p>
+    <ul>
+      <li>Do the books go left-to-right or top-to-bottom?</li>
+      <li>Should they be bunched to the left? Centered? Spread out?</li>
+      <li>Should they be at the top, middle, or bottom of the shelf?</li>
+    </ul>
+
+    <h4>Without Flexbox (default):</h4>
+    <div class="flex-demo">
+      <!--
+        Without display: flex, block elements stack VERTICALLY.
+        Each div takes up the full width and starts on a new line.
+      -->
+      <div class="flex-item item-1">Item 1</div>
+      <div class="flex-item item-2">Item 2</div>
+      <div class="flex-item item-3">Item 3</div>
+    </div>
+    <p class="label">No flexbox -- items stack vertically (each takes full width)</p>
+
+    <h4>With Flexbox (display: flex):</h4>
+    <div class="flex-demo" style="display: flex; gap: 10px;">
+      <!--
+        display: flex; on the PARENT makes children line up in a ROW.
+        gap: 10px; adds space between items.
+
+        That's it! Just adding "display: flex" changes everything.
+      -->
+      <div class="flex-item item-1">Item 1</div>
+      <div class="flex-item item-2">Item 2</div>
+      <div class="flex-item item-3">Item 3</div>
+    </div>
+    <p class="label">display: flex; gap: 10px; -- items are now in a row!</p>
+
+    <div class="note">
+      <strong>The ONLY thing you need to start using Flexbox:</strong>
+      Add <code>display: flex;</code> to the PARENT container.
+      The children automatically line up in a row.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- JUSTIFY-CONTENT                                                 -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>justify-content: Horizontal Alignment</h3>
+
+    <p><code>justify-content</code> controls how items are spread out along the <strong>main axis</strong>
+    (horizontally, when items are in a row).</p>
+
+    <p>Think of it as: "Where on the shelf should the books go?"</p>
+
+    <!-- flex-start (default) -->
+    <p class="label">justify-content: flex-start; (default -- items pushed to the LEFT)</p>
+    <div class="flex-demo" style="display: flex; justify-content: flex-start; gap: 10px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">2</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      flex-start = items bunch up at the START (left side).
+      This is the DEFAULT. Even without specifying, items go left.
+    -->
+
+    <!-- flex-end -->
+    <p class="label">justify-content: flex-end; (items pushed to the RIGHT)</p>
+    <div class="flex-demo" style="display: flex; justify-content: flex-end; gap: 10px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">2</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      flex-end = items bunch up at the END (right side).
+      Like pushing all books to the right side of the shelf.
+    -->
+
+    <!-- center -->
+    <p class="label">justify-content: center; (items CENTERED)</p>
+    <div class="flex-demo" style="display: flex; justify-content: center; gap: 10px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">2</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      center = items are centered in the container.
+      Equal empty space on left and right.
+      THIS IS HOW YOU CENTER THINGS IN CSS. So easy with Flexbox!
+    -->
+
+    <!-- space-between -->
+    <p class="label">justify-content: space-between; (items spread out, edges touching walls)</p>
+    <div class="flex-demo" style="display: flex; justify-content: space-between;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">2</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      space-between = first item at the start, last item at the end,
+      remaining items spread evenly in between.
+
+      Think: books pushed to both ends of the shelf, with equal gaps.
+      This is VERY commonly used for navigation bars!
+    -->
+
+    <!-- space-around -->
+    <p class="label">justify-content: space-around; (equal space AROUND each item)</p>
+    <div class="flex-demo" style="display: flex; justify-content: space-around;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">2</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      space-around = equal space around EACH item.
+      Note: the edges have half the space of the gaps between items.
+    -->
+
+    <!-- space-evenly -->
+    <p class="label">justify-content: space-evenly; (perfectly equal spacing everywhere)</p>
+    <div class="flex-demo" style="display: flex; justify-content: space-evenly;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">2</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      space-evenly = exactly the same gap everywhere, including edges.
+      Slightly different from space-around (which has half-gaps at edges).
+    -->
+
+    <div class="note">
+      <strong>Most used in real projects:</strong>
+      <br><code>center</code> -- for centering content
+      <br><code>space-between</code> -- for navigation bars and headers
+      <br><code>flex-start</code> / <code>flex-end</code> -- for aligning to one side
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- ALIGN-ITEMS                                                     -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>align-items: Vertical Alignment</h3>
+
+    <p><code>align-items</code> controls alignment along the <strong>cross axis</strong>
+    (vertically, when items are in a row).</p>
+
+    <p>Think of it as: "Should items be at the top, middle, or bottom of the shelf?"</p>
+
+    <!-- stretch (default) -->
+    <p class="label">align-items: stretch; (default -- items stretch to fill height)</p>
+    <div class="flex-demo" style="display: flex; align-items: stretch; gap: 10px; height: 120px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">Taller<br>Item</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      stretch = items stretch to fill the container's height.
+      This is the DEFAULT behavior.
+    -->
+
+    <!-- flex-start -->
+    <p class="label">align-items: flex-start; (items at the TOP)</p>
+    <div class="flex-demo" style="display: flex; align-items: flex-start; gap: 10px; height: 120px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">Taller<br>Item</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      flex-start = items align to the TOP of the container.
+      Each item is only as tall as its content.
+    -->
+
+    <!-- center -->
+    <p class="label">align-items: center; (items in the MIDDLE vertically)</p>
+    <div class="flex-demo" style="display: flex; align-items: center; gap: 10px; height: 120px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">Taller<br>Item</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      center = items are vertically centered.
+      Combined with justify-content: center, you can center
+      something both horizontally AND vertically!
+    -->
+
+    <!-- flex-end -->
+    <p class="label">align-items: flex-end; (items at the BOTTOM)</p>
+    <div class="flex-demo" style="display: flex; align-items: flex-end; gap: 10px; height: 120px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">Taller<br>Item</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      flex-end = items align to the BOTTOM of the container.
+    -->
+
+    <div class="note">
+      <strong>The HOLY GRAIL of centering:</strong> To perfectly center something
+      both horizontally and vertically:
+      <br><code>display: flex; justify-content: center; align-items: center;</code>
+      <br>That's it. 3 lines. Before Flexbox, this was incredibly hard!
+    </div>
+
+    <!-- Perfect centering demo -->
+    <p class="label">The holy grail: justify-content: center + align-items: center</p>
+    <div class="flex-demo" style="display: flex; justify-content: center; align-items: center; height: 150px; background-color: #263238;">
+      <div style="color: white; font-size: 24px; font-weight: bold;">
+        I'm perfectly centered!
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- FLEX-DIRECTION                                                  -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>flex-direction: Row vs Column</h3>
+
+    <p><code>flex-direction</code> controls the DIRECTION items flow.</p>
+
+    <!-- row (default) -->
+    <p class="label">flex-direction: row; (default -- items go LEFT to RIGHT)</p>
+    <div class="flex-demo" style="display: flex; flex-direction: row; gap: 10px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">2</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      row = items flow left to right (like reading English text).
+      This is the DEFAULT. You get this without specifying.
+    -->
+
+    <!-- column -->
+    <p class="label">flex-direction: column; (items go TOP to BOTTOM)</p>
+    <div class="flex-demo" style="display: flex; flex-direction: column; gap: 10px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">2</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      column = items flow top to bottom (stacked vertically).
+
+      IMPORTANT: When direction is "column":
+        - justify-content controls VERTICAL alignment
+        - align-items controls HORIZONTAL alignment
+        (They swap! Because the "main axis" is now vertical.)
+    -->
+
+    <!-- row-reverse -->
+    <p class="label">flex-direction: row-reverse; (items go RIGHT to LEFT)</p>
+    <div class="flex-demo" style="display: flex; flex-direction: row-reverse; gap: 10px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">2</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      row-reverse = like row, but items start from the right.
+      Item 1 is now on the right, Item 3 on the left.
+    -->
+
+    <div class="note">
+      <strong>When to use column:</strong>
+      <br>Use <code>flex-direction: column;</code> when you want items stacked vertically
+      but still want the alignment powers of Flexbox (centering, spacing, etc.).
+      <br>This is common for mobile layouts, sidebars, and vertical menus.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- GAP AND FLEX-WRAP                                               -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>gap and flex-wrap</h3>
+
+    <h4>gap: Space between items</h4>
+    <p class="label">gap: 5px;</p>
+    <div class="flex-demo" style="display: flex; gap: 5px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">2</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+
+    <p class="label">gap: 30px;</p>
+    <div class="flex-demo" style="display: flex; gap: 30px;">
+      <div class="flex-item item-1">1</div>
+      <div class="flex-item item-2">2</div>
+      <div class="flex-item item-3">3</div>
+    </div>
+    <!--
+      gap = the space BETWEEN flex items (not on the outer edges).
+      It's cleaner than using margins on individual items.
+      Use gap instead of margins between flex items whenever possible.
+    -->
+
+    <h4>flex-wrap: What happens when items don't fit?</h4>
+    <p class="label">flex-wrap: nowrap; (default -- items SQUEEZE to fit, even if too small)</p>
+    <div class="flex-demo" style="display: flex; flex-wrap: nowrap; gap: 10px;">
+      <div class="flex-item item-1" style="min-width: 150px;">Wide 1</div>
+      <div class="flex-item item-2" style="min-width: 150px;">Wide 2</div>
+      <div class="flex-item item-3" style="min-width: 150px;">Wide 3</div>
+      <div class="flex-item item-4" style="min-width: 150px;">Wide 4</div>
+      <div class="flex-item item-5" style="min-width: 150px;">Wide 5</div>
+    </div>
+
+    <p class="label">flex-wrap: wrap; (items WRAP to next line if they don't fit)</p>
+    <div class="flex-demo" style="display: flex; flex-wrap: wrap; gap: 10px;">
+      <div class="flex-item item-1" style="min-width: 150px;">Wide 1</div>
+      <div class="flex-item item-2" style="min-width: 150px;">Wide 2</div>
+      <div class="flex-item item-3" style="min-width: 150px;">Wide 3</div>
+      <div class="flex-item item-4" style="min-width: 150px;">Wide 4</div>
+      <div class="flex-item item-5" style="min-width: 150px;">Wide 5</div>
+    </div>
+    <!--
+      flex-wrap: wrap; = if items are too wide to fit in one row,
+      they wrap to the NEXT line. Very important for responsive design!
+    -->
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- PRACTICAL EXAMPLE: NAVBAR                                       -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>Real Example 1: Navigation Bar</h3>
+    <p>Every website has a navbar. Here's how to build one with Flexbox:</p>
+
+    <!--
+      NAVBAR STRUCTURE:
+      - A container (nav) with display: flex
+      - Logo on the left
+      - Links on the right
+      - justify-content: space-between pushes them apart
+    -->
+
+    <nav style="
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #263238;
+      padding: 15px 25px;
+      border-radius: 8px;
+    ">
+      <!--
+        display: flex           = activate flexbox
+        justify-content: space-between = push logo left, links right
+        align-items: center     = vertically center everything
+      -->
+
+      <!-- Logo (left side) -->
+      <div style="color: white; font-size: 22px; font-weight: bold;">
+        MyApp
+      </div>
+
+      <!-- Navigation Links (right side) -->
+      <div style="display: flex; gap: 20px;">
+        <!--
+          This inner div is ALSO a flex container!
+          You can nest flex containers. This one puts the links in a row.
+        -->
+        <a href="#" style="color: #B0BEC5; text-decoration: none; font-size: 16px;">Home</a>
+        <a href="#" style="color: #B0BEC5; text-decoration: none; font-size: 16px;">About</a>
+        <a href="#" style="color: #B0BEC5; text-decoration: none; font-size: 16px;">Services</a>
+        <a href="#" style="color: white; text-decoration: none; font-size: 16px; background-color: #FF5722; padding: 8px 16px; border-radius: 5px;">Sign Up</a>
+      </div>
+    </nav>
+
+    <div class="note">
+      <strong>Key takeaway:</strong> <code>justify-content: space-between</code> is the secret
+      to navbars. It pushes the first item (logo) to the left and the last item (links)
+      to the right. This pattern is used on almost every website.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- PRACTICAL EXAMPLE: CARD LAYOUT                                  -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>Real Example 2: Card Layout</h3>
+    <p>Cards are used everywhere -- product listings, blog posts, user profiles.
+    Here's a 3-card layout using Flexbox:</p>
+
+    <div style="
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    ">
+      <!--
+        display: flex       = activate flexbox
+        gap: 20px           = space between cards
+        flex-wrap: wrap      = cards wrap to next line if screen is narrow
+        justify-content: center = center the cards
+      -->
+
+      <!-- Card 1 -->
+      <div style="
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 25px;
+        width: 220px;
+        text-align: center;
+      ">
+        <div style="
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          background-color: #f44336;
+          margin: 0 auto 15px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 30px;
+        ">H</div>
+        <h4 style="margin: 0 0 5px;">HTML</h4>
+        <p style="color: #666; font-size: 14px; margin: 0;">The structure and content of web pages. The skeleton.</p>
+      </div>
+
+      <!-- Card 2 -->
+      <div style="
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 25px;
+        width: 220px;
+        text-align: center;
+      ">
+        <div style="
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          background-color: #2196F3;
+          margin: 0 auto 15px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 30px;
+        ">C</div>
+        <h4 style="margin: 0 0 5px;">CSS</h4>
+        <p style="color: #666; font-size: 14px; margin: 0;">The styling and visual design. The clothes and paint.</p>
+      </div>
+
+      <!-- Card 3 -->
+      <div style="
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 25px;
+        width: 220px;
+        text-align: center;
+      ">
+        <div style="
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          background-color: #4CAF50;
+          margin: 0 auto 15px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 30px;
+        ">J</div>
+        <h4 style="margin: 0 0 5px;">JavaScript</h4>
+        <p style="color: #666; font-size: 14px; margin: 0;">The behavior and interactivity. The brain and muscles.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Notice:</strong> Each card uses <code>display: flex; align-items: center; justify-content: center;</code>
+      on the circle to perfectly center the letter. Flexbox centering is used constantly!
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- PRACTICAL EXAMPLE: CENTERED CONTENT                             -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>Real Example 3: Perfectly Centered Login Box</h3>
+    <p>Almost every app has a centered login box. Here's how:</p>
+
+    <div style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 350px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px;
+    ">
+      <div style="
+        background: white;
+        padding: 30px 40px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        width: 300px;
+        text-align: center;
+      ">
+        <h3 style="margin-top: 0; color: #333;">Welcome Back</h3>
+        <input type="email" placeholder="Email" style="
+          width: 100%;
+          padding: 10px;
+          margin: 8px 0;
+          border: 2px solid #ddd;
+          border-radius: 5px;
+          font-size: 16px;
+          box-sizing: border-box;
+        ">
+        <input type="password" placeholder="Password" style="
+          width: 100%;
+          padding: 10px;
+          margin: 8px 0;
+          border: 2px solid #ddd;
+          border-radius: 5px;
+          font-size: 16px;
+          box-sizing: border-box;
+        ">
+        <button style="
+          width: 100%;
+          padding: 12px;
+          margin-top: 10px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border: none;
+          border-radius: 5px;
+          font-size: 16px;
+          cursor: pointer;
+        ">Log In</button>
+      </div>
+    </div>
+
+    <p style="text-align: center; color: #888; font-size: 14px; margin-top: 10px;">
+      The outer container uses: display: flex; justify-content: center; align-items: center;
+    </p>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- QUICK REFERENCE                                                 -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>Flexbox Quick Reference</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+      <tr style="background-color: #fbe9e7;">
+        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #FF5722;">Property</th>
+        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #FF5722;">Goes On</th>
+        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #FF5722;">What It Does</th>
+      </tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>display: flex</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Parent</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Activates Flexbox</td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>flex-direction</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Parent</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">row (horizontal) or column (vertical)</td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>justify-content</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Parent</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Align items along main axis</td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>align-items</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Parent</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Align items along cross axis</td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>gap</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Parent</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Space between items</td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>flex-wrap</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Parent</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Allow items to wrap to next line</td></tr>
+      <tr><td style="padding: 8px;"><code>flex: 1</code></td><td style="padding: 8px;">Child</td><td style="padding: 8px;">Make item grow to fill available space</td></tr>
+    </table>
+  </div>
+
+  <hr>
+
+  <div style="text-align: center; padding: 20px;">
+    <h2>You finished Lesson 4!</h2>
+    <p>You now know Flexbox -- the most important layout tool in CSS.
+    Next up: Making your page work on phones (responsive design)!</p>
+    <p>
+      <a href="03-css-basics.html" style="font-size: 18px; color: #999; margin-right: 20px;">&larr; Previous: CSS Basics</a>
+      <a href="05-responsive.html" style="font-size: 20px; color: #FF5722;">Next: Responsive Design &rarr;</a>
+    </p>
+  </div>
+
+</body>
+</html>

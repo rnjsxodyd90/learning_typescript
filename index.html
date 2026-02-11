@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full-Stack Interview Prep</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#1a1a2e;--bg2:#16213e;--bg3:#0f3460;--accent:#e94560;--accent2:#533483;--text:#e0e0e0;--text2:#a0a0b0;--card:#1e2746;--border:#2a3a5c;--success:#4caf50;--warn:#ff9800;--code-bg:#0d1117}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;line-height:1.6}
+a{color:var(--accent);text-decoration:none}
+/* Sidebar */
+.sidebar{width:280px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;height:100vh;overflow-y:auto;z-index:100}
+.sidebar h1{padding:20px;font-size:1.1rem;color:var(--accent);border-bottom:1px solid var(--border);text-align:center}
+.sidebar h1 small{display:block;font-size:.7rem;color:var(--text2);font-weight:400;margin-top:4px}
+.nav-item{padding:12px 20px;cursor:pointer;border-bottom:1px solid var(--border);transition:.2s;display:flex;align-items:center;gap:10px}
+.nav-item:hover{background:var(--bg3)}
+.nav-item.active{background:var(--bg3);border-left:3px solid var(--accent)}
+.nav-item .day-num{background:var(--accent);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0}
+.nav-item .day-info{flex:1}
+.nav-item .day-title{font-size:.85rem;font-weight:600}
+.nav-item .day-sub{font-size:.7rem;color:var(--text2)}
+.nav-item .progress-dot{width:10px;height:10px;border-radius:50%;background:var(--border)}
+.nav-item .progress-dot.done{background:var(--success)}
+.nav-item .progress-dot.partial{background:var(--warn)}
+.sidebar-footer{margin-top:auto;padding:12px 20px;border-top:1px solid var(--border)}
+.sidebar-footer button{width:100%;padding:10px;background:var(--accent2);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.85rem}
+.sidebar-footer button:hover{opacity:.85}
+/* Main */
+.main{margin-left:280px;flex:1;padding:30px 40px;max-width:900px}
+.main h2{color:var(--accent);margin-bottom:6px;font-size:1.6rem}
+.main h3{color:#7ec8e3;margin:24px 0 10px;font-size:1.2rem}
+.main h4{color:var(--warn);margin:18px 0 8px;font-size:1rem}
+.section-block{background:var(--card);border-radius:10px;padding:24px;margin:16px 0;border:1px solid var(--border)}
+.section-block p{margin:8px 0;color:var(--text2)}
+.section-block ul,.section-block ol{margin:8px 0 8px 20px;color:var(--text2)}
+.section-block li{margin:4px 0}
+.section-block code{background:var(--code-bg);padding:2px 6px;border-radius:4px;font-size:.85em}
+pre[class*="language-"]{border-radius:8px;margin:12px 0;font-size:.85rem}
+/* Quiz */
+.quiz-block{background:var(--card);border-radius:10px;padding:20px;margin:16px 0;border:1px solid var(--border)}
+.quiz-block .q-title{font-weight:600;margin-bottom:12px;color:#7ec8e3}
+.quiz-option{display:block;padding:10px 14px;margin:6px 0;background:var(--bg);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:.2s;color:var(--text)}
+.quiz-option:hover{border-color:var(--accent)}
+.quiz-option.selected{border-color:var(--accent);background:rgba(233,69,96,.1)}
+.quiz-option.correct{border-color:var(--success);background:rgba(76,175,80,.15)}
+.quiz-option.wrong{border-color:var(--accent);background:rgba(233,69,96,.15)}
+.quiz-feedback{margin-top:10px;padding:10px;border-radius:6px;display:none;font-size:.9rem}
+.quiz-feedback.show{display:block}
+.quiz-feedback.correct{background:rgba(76,175,80,.15);color:var(--success)}
+.quiz-feedback.wrong{background:rgba(233,69,96,.15);color:var(--accent)}
+.quiz-submit{margin-top:10px;padding:8px 20px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer}
+.quiz-submit:hover{opacity:.85}
+/* Flashcard */
+.flashcard{background:var(--card);border-radius:10px;margin:12px 0;border:1px solid var(--border);overflow:hidden}
+.flashcard .fc-q{padding:16px 20px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.flashcard .fc-q:hover{background:rgba(255,255,255,.03)}
+.flashcard .fc-num{background:var(--accent2);color:#fff;border-radius:4px;padding:2px 8px;font-size:.75rem;margin-right:10px}
+.flashcard .fc-a{padding:0 20px;max-height:0;overflow:hidden;transition:max-height .3s;background:rgba(0,0,0,.15)}
+.flashcard .fc-a.open{padding:16px 20px;max-height:2000px}
+.flashcard .fc-a p{margin:6px 0;color:var(--text2)}
+.flashcard .fc-a code{background:var(--code-bg);padding:2px 6px;border-radius:4px;font-size:.85em}
+.fc-arrow{transition:transform .3s;color:var(--text2)}
+.flashcard.open .fc-arrow{transform:rotate(90deg)}
+/* Progress */
+.progress-bar{background:var(--bg);border-radius:10px;height:8px;margin:8px 0 20px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:10px;transition:width .4s}
+.check-item{display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;color:var(--text2)}
+.check-item input{accent-color:var(--accent)}
+.check-item.checked{color:var(--success);text-decoration:line-through}
+/* Cheat Sheet */
+.cheat-panel{position:fixed;right:-500px;top:0;width:480px;height:100vh;background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;transition:right .3s;z-index:200;padding:20px}
+.cheat-panel.open{right:0}
+.cheat-panel h2{color:var(--accent);margin-bottom:16px}
+.cheat-panel .close-btn{position:absolute;top:10px;right:16px;font-size:1.5rem;cursor:pointer;color:var(--text2)}
+.cheat-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150}
+.cheat-overlay.open{display:block}
+/* Table */
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.85rem}
+th,td{padding:8px 12px;border:1px solid var(--border);text-align:left}
+th{background:var(--bg3);color:#7ec8e3}
+/* Mobile hamburger */
+.hamburger{display:none;position:fixed;top:10px;left:10px;z-index:300;background:var(--accent);color:#fff;border:none;border-radius:6px;padding:8px 12px;font-size:1.2rem;cursor:pointer}
+/* Responsive */
+@media(max-width:768px){
+  .sidebar{left:-280px;transition:left .3s}
+  .sidebar.open{left:0}
+  .main{margin-left:0;padding:20px 16px;padding-top:50px}
+  .hamburger{display:block}
+  .cheat-panel{width:100%}
+}
+.tag{display:inline-block;background:var(--accent2);color:#fff;padding:2px 8px;border-radius:4px;font-size:.7rem;margin:2px}
+.tip-box{background:rgba(76,175,80,.1);border-left:3px solid var(--success);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:.9rem}
+.warn-box{background:rgba(233,69,96,.1);border-left:3px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin:12px 0;font-size:.9rem}
+.home-hero{text-align:center;padding:40px 0}
+.home-hero h2{font-size:2rem;margin-bottom:10px}
+.home-hero p{color:var(--text2);font-size:1.1rem;margin-bottom:30px}
+.day-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:20px 0}
+.day-card{background:var(--card);border-radius:10px;padding:20px;border:1px solid var(--border);cursor:pointer;transition:.2s}
+.day-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.day-card h3{color:var(--accent);margin-bottom:6px;font-size:1rem}
+.day-card p{color:var(--text2);font-size:.8rem}
+.reset-btn{background:transparent;border:1px solid var(--accent);color:var(--accent);padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;margin-top:8px}
+.reset-btn:hover{background:var(--accent);color:#fff}
+.cat-header{display:flex;align-items:center;gap:8px;margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.cat-header span{font-size:1.1rem;font-weight:600;color:var(--warn)}
+</style>
+</head>
+<body>
+<button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
+<nav class="sidebar" id="sidebar"></nav>
+<main class="main" id="main"></main>
+<div class="cheat-overlay" id="cheatOverlay" onclick="toggleCheat()"></div>
+<div class="cheat-panel" id="cheatPanel"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script>
+// ============================
+// DATA: Days Content
+// ============================
+const DAYS=[
+// ---- DAY 1: TypeScript ----
+{
+title:"TypeScript Fundamentals",
+sub:"Types, interfaces, classes, generics",
+icon:"TS",
+sections:[
+{title:"What is TypeScript?",content:`<p>TypeScript is a <strong>superset of JavaScript</strong> created by Microsoft. It adds <strong>static typing</strong> — you declare what type each variable, parameter, and return value should be, and errors are caught at <em>compile time</em> instead of runtime.</p>
+<div class="tip-box"><strong>Why does this matter?</strong> Angular uses TypeScript by default. Every Angular component you write is TypeScript.</div>
+<p>Key benefits:</p>
+<ul>
+<li><strong>Catches bugs early</strong> — typos, wrong types, missing properties</li>
+<li><strong>Better IDE support</strong> — autocomplete, refactoring</li>
+<li><strong>Self-documenting</strong> — types explain what code expects</li>
+</ul>`},
+{title:"Variables & Basic Types",content:`<p>TypeScript has the same variable declarations as JS but adds type annotations:</p>
+<pre><code class="language-typescript">// Basic types
+const name: string = "Sura";
+let age: number = 25;
+let isReady: boolean = true;
+
+// Arrays
+const scores: number[] = [85, 92, 78];
+const names: string[] = ["Alice", "Bob"];
+
+// let vs const
+let canChange: string = "hello";
+canChange = "world"; // OK
+
+const cantChange: string = "fixed";
+// cantChange = "oops"; // ERROR!</code></pre>
+<div class="warn-box"><strong>Avoid <code>any</code></strong> — it disables type checking entirely. Use <code>unknown</code> if the type is truly unknown.</div>
+<table><tr><th>Type</th><th>Example</th><th>Description</th></tr>
+<tr><td><code>string</code></td><td><code>"hello"</code></td><td>Text</td></tr>
+<tr><td><code>number</code></td><td><code>42, 3.14</code></td><td>Integer or float</td></tr>
+<tr><td><code>boolean</code></td><td><code>true, false</code></td><td>True/false</td></tr>
+<tr><td><code>any</code></td><td><code>anything</code></td><td>Escape hatch (avoid!)</td></tr>
+<tr><td><code>void</code></td><td>—</td><td>No return value</td></tr>
+<tr><td><code>null/undefined</code></td><td>—</td><td>Absence of value</td></tr>
+</table>`},
+{title:"Interfaces",content:`<p>An interface defines the <strong>shape of an object</strong> — what properties it must have and their types. Think of it as a blueprint or contract.</p>
+<pre><code class="language-typescript">interface User {
+  name: string;
+  age: number;
+  email: string;
+  isActive: boolean;
+  nickname?: string;  // optional (?)
+}
+
+const user: User = {
+  name: "Sura",
+  age: 25,
+  email: "sura@example.com",
+  isActive: true
+  // nickname is optional, so we can skip it
+};
+
+// TypeScript catches mistakes:
+// const bad: User = { name: "Bob" };
+// ERROR: missing age, email, isActive</code></pre>
+<div class="tip-box"><strong>Interview tip:</strong> "An interface defines the contract an object must follow — what properties and types it needs."</div>`},
+{title:"Functions with Types",content:`<p>In TypeScript, you type both parameters and the return value:</p>
+<pre><code class="language-typescript">// Regular function
+function add(a: number, b: number): number {
+  return a + b;
+}
+
+// Arrow function
+const multiply = (a: number, b: number): number => a * b;
+
+// Optional parameters (?)
+function greet(name: string, greeting?: string): string {
+  return \`\${greeting || "Hello"}, \${name}!\`;
+}
+
+// Default parameters
+function createUser(name: string, role: string = "viewer"): string {
+  return \`\${name} (\${role})\`;
+}
+
+greet("Sura");           // "Hello, Sura!"
+greet("Sura", "Hi");     // "Hi, Sura!"
+createUser("Bob");        // "Bob (viewer)"
+createUser("Bob","admin");// "Bob (admin)"</code></pre>`},
+{title:"Classes & Inheritance",content:`<pre><code class="language-typescript">class Animal {
+  // Access modifiers: public, private, protected
+  constructor(
+    public name: string,
+    private sound: string,
+    protected speed: number
+  ) {}
+
+  speak(): string {
+    return \`\${this.name} says \${this.sound}\`;
+  }
+}
+
+// Inheritance with extends
+class Dog extends Animal {
+  constructor(name: string) {
+    super(name, "Woof", 30); // call parent constructor
+  }
+
+  fetch(): string {
+    // Can access protected 'speed', NOT private 'sound'
+    return \`\${this.name} runs at \${this.speed}mph to fetch!\`;
+  }
+}
+
+const dog = new Dog("Rex");
+dog.speak();  // "Rex says Woof"
+dog.fetch();  // "Rex runs at 30mph to fetch!"
+dog.name;     // OK (public)
+// dog.sound; // ERROR (private)
+// dog.speed; // ERROR (protected - only in class/subclass)</code></pre>
+<table><tr><th>Modifier</th><th>Class</th><th>Subclass</th><th>Outside</th></tr>
+<tr><td><code>public</code></td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+<tr><td><code>protected</code></td><td>Yes</td><td>Yes</td><td>No</td></tr>
+<tr><td><code>private</code></td><td>Yes</td><td>No</td><td>No</td></tr></table>`},
+{title:"Enums & Generics",content:`<pre><code class="language-typescript">// String enum - named constants
+enum Status {
+  Active = "ACTIVE",
+  Inactive = "INACTIVE",
+  Pending = "PENDING"
+}
+
+const userStatus: Status = Status.Active;
+
+// Generics - reusable code that works with multiple types
+function wrapInArray&lt;T&gt;(value: T): T[] {
+  return [value];
+}
+
+wrapInArray(5);       // number[] → [5]
+wrapInArray("hello"); // string[] → ["hello"]
+
+// Generic interface
+interface ApiResponse&lt;T&gt; {
+  data: T;
+  success: boolean;
+  error?: string;
+}
+
+const response: ApiResponse&lt;User[]&gt; = {
+  data: [{ name: "Sura", age: 25, email: "s@e.com", isActive: true }],
+  success: true
+};</code></pre>
+<div class="tip-box"><strong>Interview tip:</strong> "Generics let you write flexible, reusable code that still has type safety — like a function that works with any type but keeps track of which type was used."</div>`}
+],
+quizzes:[
+{q:"What keyword declares a variable that cannot be reassigned?",opts:["let","var","const","static"],ans:2,explain:"const declares a constant binding that can't be reassigned. Note: objects/arrays declared with const can still be mutated."},
+{q:"What TypeScript type should you avoid using?",opts:["string","unknown","any","void"],ans:2,explain:"'any' disables type checking entirely, defeating the purpose of TypeScript. Use 'unknown' if the type is truly unknown."},
+{q:"What does the '?' mean in an interface property?",opts:["The property is nullable","The property is optional","The property is readonly","The property is private"],ans:1,explain:"A question mark after a property name (e.g., nickname?: string) means the property is optional — you don't have to include it."},
+{q:"What is the output?<br><code>const arr = [1,5,8,3]; arr.filter(x => x > 4);</code>",opts:["[1,5,8,3]","[5,8]","[1,3]","[5,8,3]"],ans:1,explain:"filter() keeps elements where the callback returns true. 5 > 4 and 8 > 4 are true, so the result is [5, 8]."},
+{q:"Which access modifier allows access in the class and its subclasses only?",opts:["public","private","protected","readonly"],ans:2,explain:"protected members are accessible within the class and any class that extends it, but not from outside."},
+{q:"What keyword is used for class inheritance?",opts:["implements","inherits","extends","super"],ans:2,explain:"'extends' creates a subclass. 'super' is used inside the subclass to call the parent's constructor/methods."},
+{q:"What do generics provide?",opts:["Runtime type checking","Reusable code with type safety","Faster execution","Dynamic typing"],ans:1,explain:"Generics let you write functions/classes that work with any type while maintaining compile-time type safety."},
+{q:"What is the correct type for an array of strings?",opts:["Array(string)","string{}","string[]","[string]"],ans:2,explain:"string[] is the shorthand syntax. Array<string> is the generic syntax — both are equivalent."},
+{q:"What does an interface define?",opts:["A function body","The shape/contract of an object","A database schema","A CSS class"],ans:1,explain:"An interface defines what properties and types an object must have — like a blueprint or contract."},
+{q:"What does <code>super()</code> do in a constructor?",opts:["Creates a new instance","Calls the parent class constructor","Overrides a method","Makes a property static"],ans:1,explain:"super() calls the parent class constructor. It must be called before using 'this' in a subclass constructor."}
+]
+},
+// ---- DAY 2: HTML & CSS ----
+{
+title:"HTML & CSS Basics",
+sub:"Structure, styling, flexbox, responsive",
+icon:"HC",
+sections:[
+{title:"HTML Fundamentals",content:`<p><strong>HTML</strong> (HyperText Markup Language) is the structure/skeleton of every web page. It uses <strong>tags</strong> to define content.</p>
+<pre><code class="language-markup">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;My Page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello World&lt;/h1&gt;
+    &lt;p&gt;This is a paragraph.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<table><tr><th>Tag</th><th>Purpose</th><th>Block/Inline</th></tr>
+<tr><td><code>&lt;h1&gt;-&lt;h6&gt;</code></td><td>Headings (h1 largest)</td><td>Block</td></tr>
+<tr><td><code>&lt;p&gt;</code></td><td>Paragraph</td><td>Block</td></tr>
+<tr><td><code>&lt;div&gt;</code></td><td>Generic block container</td><td>Block</td></tr>
+<tr><td><code>&lt;span&gt;</code></td><td>Generic inline container</td><td>Inline</td></tr>
+<tr><td><code>&lt;a href=""&gt;</code></td><td>Hyperlink</td><td>Inline</td></tr>
+<tr><td><code>&lt;img src=""&gt;</code></td><td>Image (self-closing)</td><td>Inline</td></tr>
+<tr><td><code>&lt;ul&gt;/&lt;ol&gt;</code></td><td>Unordered/ordered list</td><td>Block</td></tr>
+<tr><td><code>&lt;input&gt;</code></td><td>Form input (self-closing)</td><td>Inline</td></tr>
+</table>
+<div class="tip-box"><strong>Semantic HTML</strong> uses meaningful tags like <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code> instead of generic <code>&lt;div&gt;</code>s. Better for accessibility and SEO.</div>`},
+{title:"CSS Box Model",content:`<p>Every HTML element is a <strong>box</strong> with four layers:</p>
+<pre><code class="language-css">/* The Box Model (outside → inside):
+   MARGIN → BORDER → PADDING → CONTENT */
+
+.box {
+  width: 200px;          /* Content width */
+  padding: 20px;         /* Space inside border */
+  border: 2px solid red; /* The border itself */
+  margin: 10px;          /* Space outside border */
+}
+
+/* Total width = margin + border + padding + content + padding + border + margin
+   = 10 + 2 + 20 + 200 + 20 + 2 + 10 = 264px */
+
+/* Fix this with box-sizing: */
+* { box-sizing: border-box; }
+/* Now width INCLUDES padding and border */</code></pre>
+<div class="warn-box"><strong>Classic interview question:</strong> "What is the CSS Box Model?" — Content, padding, border, margin. Use <code>box-sizing: border-box</code> so width includes padding/border.</div>`},
+{title:"Flexbox Layout",content:`<p>Flexbox is the modern way to layout elements in rows or columns. Used in ~90% of modern web pages.</p>
+<pre><code class="language-css">/* Make a container flex */
+.container {
+  display: flex;
+  flex-direction: row;     /* row (default) or column */
+  justify-content: center; /* Main axis alignment */
+  align-items: center;     /* Cross axis alignment */
+  gap: 16px;               /* Space between items */
+  flex-wrap: wrap;          /* Wrap to next line */
+}
+
+/* justify-content values:
+   flex-start | flex-end | center |
+   space-between | space-around | space-evenly */
+
+/* align-items values:
+   flex-start | flex-end | center | stretch */
+
+/* Child properties */
+.item {
+  flex: 1;        /* Grow to fill space equally */
+  flex-shrink: 0; /* Don't shrink */
+}</code></pre>`},
+{title:"Responsive Design & Media Queries",content:`<p>Responsive design makes pages work on all screen sizes using <strong>media queries</strong>:</p>
+<pre><code class="language-css">/* Mobile-first approach: base styles are for mobile */
+.container {
+  display: flex;
+  flex-direction: column; /* Stack on mobile */
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .container {
+    flex-direction: row; /* Side by side on tablet+ */
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* Responsive units */
+/* px  = fixed pixels (not responsive) */
+/* rem = relative to root font-size (responsive) */
+/* %   = relative to parent element */
+/* vw/vh = relative to viewport width/height */</code></pre>
+<table><tr><th>Unit</th><th>Relative To</th><th>Use Case</th></tr>
+<tr><td><code>px</code></td><td>Nothing (fixed)</td><td>Borders, small spacing</td></tr>
+<tr><td><code>rem</code></td><td>Root font-size</td><td>Font sizes, spacing</td></tr>
+<tr><td><code>%</code></td><td>Parent element</td><td>Widths, responsive layout</td></tr>
+<tr><td><code>vw/vh</code></td><td>Viewport</td><td>Full-screen sections</td></tr></table>`},
+{title:"CSS Selectors & Specificity",content:`<pre><code class="language-css">/* Element selector */
+p { color: white; }
+
+/* Class selector (.) - reusable */
+.highlight { background: yellow; }
+
+/* ID selector (#) - unique per page */
+#header { font-size: 2rem; }
+
+/* Specificity (highest wins):
+   1. Inline styles (style="...")   → 1000
+   2. ID selectors (#id)            → 100
+   3. Class selectors (.class)      → 10
+   4. Element selectors (div, p)    → 1
+*/
+
+/* Position values */
+/* static   - default, normal flow */
+/* relative - offset from normal position */
+/* absolute - positioned relative to nearest positioned ancestor */
+/* fixed    - positioned relative to viewport (stays on scroll) */
+/* sticky   - toggles between relative and fixed */</code></pre>`}
+],
+quizzes:[
+{q:"What is the difference between <code>&lt;div&gt;</code> and <code>&lt;span&gt;</code>?",opts:["div is inline, span is block","div is block, span is inline","They are identical","div is for text only"],ans:1,explain:"<div> is a block-level element (takes full width, stacks vertically). <span> is inline (only takes needed width, flows horizontally)."},
+{q:"What are the four layers of the CSS Box Model (outside to inside)?",opts:["padding, border, margin, content","margin, border, padding, content","content, padding, border, margin","border, margin, padding, content"],ans:1,explain:"From outside to inside: margin → border → padding → content."},
+{q:"What CSS property creates a flex container?",opts:["flex: 1","position: flex","display: flex","flex-direction: row"],ans:2,explain:"display: flex on a container makes its children flex items, enabling flexbox layout."},
+{q:"What does <code>justify-content: space-between</code> do?",opts:["Centers all items","Puts equal space between items, first/last at edges","Adds space around each item","Stacks items vertically"],ans:1,explain:"space-between distributes items with equal space between them. The first item is at the start, the last at the end."},
+{q:"What CSS unit is relative to the root font-size?",opts:["px","em","rem","%"],ans:2,explain:"rem = root em. If root font-size is 16px, then 1rem = 16px. Great for responsive typography."},
+{q:"Which has the highest CSS specificity?",opts:["Element selector (p)","Class selector (.name)","ID selector (#header)","Universal selector (*)"],ans:2,explain:"ID selectors (100) beat class selectors (10) which beat element selectors (1) which beat universal (0)."},
+{q:"What does <code>@media (max-width: 768px)</code> target?",opts:["Screens wider than 768px","Screens exactly 768px","Screens 768px or narrower","Print media"],ans:2,explain:"max-width: 768px applies styles when the viewport is 768 pixels or narrower (tablets and phones)."},
+{q:"What HTML attribute connects a <code>&lt;label&gt;</code> to an <code>&lt;input&gt;</code>?",opts:["name","id","for","link"],ans:2,explain:"The 'for' attribute on a <label> should match the 'id' attribute of its <input>, connecting them for accessibility."}
+]
+},
+// ---- DAY 3: Angular Basics ----
+{
+title:"Angular Basics",
+sub:"Components, binding, directives, lifecycle",
+icon:"NG",
+sections:[
+{title:"What is Angular?",content:`<p>Angular is a <strong>framework by Google</strong> for building web applications. It uses TypeScript by default and organizes code into <strong>components</strong>.</p>
+<table><tr><th>Feature</th><th>Angular</th><th>React</th></tr>
+<tr><td>Made by</td><td>Google</td><td>Meta (Facebook)</td></tr>
+<tr><td>Type</td><td>Full framework</td><td>UI library</td></tr>
+<tr><td>Language</td><td>TypeScript</td><td>JavaScript (+ optional TS)</td></tr>
+<tr><td>Includes</td><td>Router, forms, HTTP, testing</td><td>Just the view layer</td></tr>
+<tr><td>Structure</td><td>Opinionated (one way)</td><td>Flexible (many ways)</td></tr>
+</table>
+<p><strong>Four building blocks:</strong></p>
+<ol>
+<li><strong>Modules</strong> — containers that group related components (<code>@NgModule</code>)</li>
+<li><strong>Components</strong> — UI building blocks with .ts, .html, .css files (<code>@Component</code>)</li>
+<li><strong>Templates</strong> — HTML with Angular syntax: <code>{{ }}</code>, <code>*ngIf</code>, <code>*ngFor</code></li>
+<li><strong>Services</strong> — Business logic and data management (<code>@Injectable</code>)</li>
+</ol>`},
+{title:"Components",content:`<p>A component controls a piece of the UI. It has three parts:</p>
+<pre><code class="language-typescript">import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-user-card',      // HTML tag name
+  templateUrl: './user-card.component.html',  // Template
+  styleUrls: ['./user-card.component.css']    // Styles
+})
+export class UserCardComponent {
+  name: string = 'Sura';
+  age: number = 25;
+  isActive: boolean = true;
+
+  greet(): string {
+    return \`Hello, \${this.name}!\`;
+  }
+}</code></pre>
+<div class="tip-box"><strong>Think of components like LEGO blocks</strong> — you snap them together to build a complete page. Each component is reusable and self-contained.</div>`},
+{title:"Data Binding (4 Types)",content:`<pre><code class="language-typescript">// 1. INTERPOLATION — TS → Template (display values)
+// {{ expression }}
+&lt;h1&gt;{{ title }}&lt;/h1&gt;
+&lt;p&gt;{{ user.name }} is {{ user.age }} years old&lt;/p&gt;
+
+// 2. PROPERTY BINDING — TS → Template (set properties)
+// [property]="value"
+&lt;img [src]="imageUrl"&gt;
+&lt;button [disabled]="isLoading"&gt;Submit&lt;/button&gt;
+
+// 3. EVENT BINDING — Template → TS (handle events)
+// (event)="handler()"
+&lt;button (click)="onSubmit()"&gt;Submit&lt;/button&gt;
+&lt;input (keyup)="onSearch($event)"&gt;
+
+// 4. TWO-WAY BINDING — TS ↔ Template (sync both ways)
+// [(ngModel)]="property"  (requires FormsModule!)
+&lt;input [(ngModel)]="searchTerm"&gt;</code></pre>
+<table><tr><th>Syntax</th><th>Name</th><th>Direction</th></tr>
+<tr><td><code>{{ }}</code></td><td>Interpolation</td><td>TS → HTML</td></tr>
+<tr><td><code>[ ]</code></td><td>Property binding</td><td>TS → HTML</td></tr>
+<tr><td><code>( )</code></td><td>Event binding</td><td>HTML → TS</td></tr>
+<tr><td><code>[( )]</code></td><td>Two-way binding</td><td>TS ↔ HTML</td></tr>
+</table>
+<div class="tip-box"><strong>Memory trick:</strong> () looks like "O" for Output (events go OUT). [] looks like a box receiving something IN.</div>`},
+{title:"Structural Directives",content:`<pre><code class="language-markup">&lt;!-- *ngIf — Conditionally show/hide an element --&gt;
+&lt;p *ngIf="isLoggedIn"&gt;Welcome back!&lt;/p&gt;
+&lt;p *ngIf="!isLoggedIn"&gt;Please log in.&lt;/p&gt;
+
+&lt;!-- *ngFor — Loop through an array --&gt;
+&lt;ul&gt;
+  &lt;li *ngFor="let user of users"&gt;
+    {{ user.name }} — {{ user.email }}
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- *ngFor with index --&gt;
+&lt;div *ngFor="let item of items; let i = index"&gt;
+  {{ i + 1 }}. {{ item }}
+&lt;/div&gt;
+
+&lt;!-- IMPORTANT: Cannot use *ngIf and *ngFor
+     on the same element! Use a wrapper: --&gt;
+&lt;ng-container *ngIf="showList"&gt;
+  &lt;li *ngFor="let item of items"&gt;{{ item }}&lt;/li&gt;
+&lt;/ng-container&gt;</code></pre>`},
+{title:"@Input, @Output & Component Communication",content:`<pre><code class="language-typescript">// CHILD component receives data via @Input
+@Component({ selector: 'app-product-card', ... })
+export class ProductCardComponent {
+  @Input() product!: Product;  // receives from parent
+  @Output() addToCart = new EventEmitter&lt;Product&gt;();
+
+  onBuy() {
+    this.addToCart.emit(this.product); // sends to parent
+  }
+}
+
+// PARENT template
+&lt;app-product-card
+  [product]="selectedProduct"
+  (addToCart)="handleAddToCart($event)"
+&gt;&lt;/app-product-card&gt;</code></pre>
+<table><tr><th>Decorator</th><th>Direction</th><th>Analogy</th></tr>
+<tr><td><code>@Input()</code></td><td>Parent → Child (data flows DOWN)</td><td>Like React props</td></tr>
+<tr><td><code>@Output()</code></td><td>Child → Parent (events flow UP)</td><td>Like React callbacks</td></tr></table>`},
+{title:"Lifecycle Hooks",content:`<pre><code class="language-typescript">export class UserListComponent implements OnInit, OnDestroy {
+  users: User[] = [];
+
+  constructor(private userService: UserService) {
+    // ONLY for dependency injection
+    // Do NOT fetch data here!
+  }
+
+  ngOnInit(): void {
+    // Component is ready — fetch data HERE
+    this.userService.getUsers().subscribe(data => {
+      this.users = data;
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Component is being removed — clean up
+    // Unsubscribe from observables, clear timers
+  }
+}</code></pre>
+<table><tr><th>Hook</th><th>When</th><th>Use For</th></tr>
+<tr><td><code>ngOnInit</code></td><td>After component initialized</td><td>Fetch data, setup</td></tr>
+<tr><td><code>ngOnChanges</code></td><td>When @Input values change</td><td>React to input changes</td></tr>
+<tr><td><code>ngOnDestroy</code></td><td>Before component removed</td><td>Cleanup, unsubscribe</td></tr>
+</table>
+<div class="warn-box"><strong>Interview favorite:</strong> "Why not use the constructor?" — @Input values aren't available yet, and the component isn't fully initialized. Use ngOnInit instead.</div>`}
+],
+quizzes:[
+{q:"What decorator defines an Angular component?",opts:["@NgModule","@Injectable","@Component","@Directive"],ans:2,explain:"@Component is the decorator that marks a class as an Angular component and provides metadata like selector, template, and styles."},
+{q:"What is {{ expression }} called in Angular?",opts:["Template literal","String interpolation","Data injection","Interpolation"],ans:3,explain:"{{ }} is called interpolation — it evaluates the expression and displays the result as text in the template."},
+{q:"Which lifecycle hook should you use to fetch data?",opts:["constructor","ngOnChanges","ngOnInit","ngAfterViewInit"],ans:2,explain:"ngOnInit runs after the component is initialized and @Input values are available. The constructor should only be used for dependency injection."},
+{q:"What module must you import to use <code>[(ngModel)]</code>?",opts:["HttpClientModule","ReactiveFormsModule","FormsModule","CommonModule"],ans:2,explain:"FormsModule must be imported in your module to use ngModel for two-way data binding."},
+{q:"What direction does <code>@Input()</code> pass data?",opts:["Child → Parent","Parent → Child","Component → Service","Both directions"],ans:1,explain:"@Input passes data DOWN from parent to child component. Like React props."},
+{q:"Can you use <code>*ngIf</code> and <code>*ngFor</code> on the same element?",opts:["Yes, always","Yes, but only on <div>","No, use a wrapper element","No, use a pipe instead"],ans:2,explain:"You cannot use two structural directives on the same element. Wrap with <ng-container> which doesn't render an extra DOM element."},
+{q:"What does <code>(click)=\"doSomething()\"</code> represent?",opts:["Property binding","Interpolation","Event binding","Two-way binding"],ans:2,explain:"Parentheses () represent event binding — listening for DOM events and calling a method in the component class."},
+{q:"What three files make up a typical Angular component?",opts:[".ts, .html, .css",".js, .html, .scss",".ts, .jsx, .css",".java, .html, .css"],ans:0,explain:"An Angular component typically has a TypeScript file (logic), HTML file (template), and CSS file (styles)."},
+{q:"What is <code>[(ngModel)]</code> nicknamed?",opts:["Double bind","Banana in a box","Two-way street","Angular sync"],ans:1,explain:"[(ngModel)] is called 'banana in a box' because the parentheses () look like a banana inside the square brackets []."},
+{q:"What does <code>[disabled]=\"isLoading\"</code> do?",opts:["Calls isLoading() when clicked","Sets the disabled property based on isLoading","Creates a two-way binding","Displays isLoading as text"],ans:1,explain:"This is property binding — it dynamically sets the HTML element's disabled property to the value of the isLoading variable."}
+]
+},
+// ---- DAY 4: Angular Services, HTTP, Routing ----
+{
+title:"Angular Services & Routing",
+sub:"DI, HTTP client, routing, pipes",
+icon:"NG",
+sections:[
+{title:"How the Pieces Connect",content:`<pre><code class="language-typescript">// The full request flow:
+// USER CLICKS LINK
+//   → ROUTING decides which component to show
+//   → COMPONENT loads and needs data
+//   → SERVICE provides data management
+//   → HTTP CLIENT calls the API
+//   → SERVER returns JSON
+//   → SERVICE passes data to component
+//   → COMPONENT displays with PIPES formatting</code></pre>
+<div class="warn-box"><strong>THIS IS THE #1 INTERVIEW TOPIC:</strong> Dependency Injection. Every. Single. Angular. Interview. Will. Ask. About. This.</div>`},
+{title:"Services & Dependency Injection",content:`<p>A <strong>service</strong> is a class that handles business logic and data management, separate from the UI. <strong>Dependency Injection (DI)</strong> is how Angular provides services to components.</p>
+<pre><code class="language-typescript">// Creating a service
+@Injectable({ providedIn: 'root' })  // Available app-wide
+export class UserService {
+  private users: User[] = [];
+
+  getAll(): User[] { return this.users; }
+  add(user: User): void { this.users.push(user); }
+}
+
+// WRONG way (don't do this):
+// service = new UserService();  // Component creates its own
+
+// RIGHT way (Dependency Injection):
+export class UserListComponent {
+  constructor(private userService: UserService) {}
+  // Angular creates and provides the service!
+}</code></pre>
+<p><strong>Why DI matters:</strong></p>
+<ul>
+<li><strong>Testable</strong> — swap real service for mock in tests</li>
+<li><strong>Loosely coupled</strong> — components don't create dependencies</li>
+<li><strong>Singleton</strong> — one shared instance across all components</li>
+</ul>
+<div class="tip-box"><strong>Interview answer:</strong> "Dependency Injection is a design pattern where a class receives its dependencies from an external source rather than creating them itself. In Angular, you declare what you need in the constructor, and the framework provides it. This makes code testable, reusable, and loosely coupled."</div>`},
+{title:"HTTP Client",content:`<pre><code class="language-typescript">// Service with HTTP calls
+@Injectable({ providedIn: 'root' })
+export class UserService {
+  private apiUrl = 'https://api.example.com/users';
+
+  constructor(private http: HttpClient) {}
+
+  getAll(): Observable&lt;User[]&gt; {
+    return this.http.get&lt;User[]&gt;(this.apiUrl);
+  }
+
+  getById(id: number): Observable&lt;User&gt; {
+    return this.http.get&lt;User&gt;(\`\${this.apiUrl}/\${id}\`);
+  }
+
+  create(user: User): Observable&lt;User&gt; {
+    return this.http.post&lt;User&gt;(this.apiUrl, user);
+  }
+
+  update(id: number, user: User): Observable&lt;User&gt; {
+    return this.http.put&lt;User&gt;(\`\${this.apiUrl}/\${id}\`, user);
+  }
+
+  delete(id: number): Observable&lt;void&gt; {
+    return this.http.delete&lt;void&gt;(\`\${this.apiUrl}/\${id}\`);
+  }
+}
+
+// Using in a component
+export class UserListComponent implements OnInit {
+  users: User[] = [];
+
+  constructor(private userService: UserService) {}
+
+  ngOnInit(): void {
+    this.userService.getAll().subscribe(data => {
+      this.users = data;
+    });
+  }
+}</code></pre>
+<div class="tip-box"><strong>Key:</strong> HttpClient methods return <strong>Observables</strong>, not Promises. You must <code>.subscribe()</code> to execute the request.</div>`},
+{title:"Routing",content:`<pre><code class="language-typescript">// Define routes
+const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'users', component: UserListComponent },
+  { path: 'users/:id', component: UserDetailComponent },
+  { path: '**', component: NotFoundComponent }  // 404 catch-all
+];
+
+// In template — navigation links
+&lt;a routerLink="/"&gt;Home&lt;/a&gt;
+&lt;a routerLink="/users"&gt;Users&lt;/a&gt;
+
+// Where routed components appear:
+&lt;router-outlet&gt;&lt;/router-outlet&gt;
+
+// Programmatic navigation
+export class LoginComponent {
+  constructor(private router: Router) {}
+
+  onLoginSuccess() {
+    this.router.navigate(['/dashboard']);
+  }
+}
+
+// Reading URL parameters
+export class UserDetailComponent implements OnInit {
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+  }
+}</code></pre>`},
+{title:"Pipes",content:`<p>Pipes transform data for display in templates:</p>
+<pre><code class="language-markup">&lt;!-- Built-in pipes --&gt;
+{{ birthday | date:'longDate' }}     &lt;!-- January 15, 2024 --&gt;
+{{ price | currency:'EUR' }}          &lt;!-- €19.99 --&gt;
+{{ name | uppercase }}                &lt;!-- SURA --&gt;
+{{ name | lowercase }}                &lt;!-- sura --&gt;
+{{ longText | slice:0:50 }}           &lt;!-- First 50 chars --&gt;
+{{ user | json }}                     &lt;!-- Debug: show as JSON --&gt;</code></pre>`}
+],
+quizzes:[
+{q:"What is Dependency Injection?",opts:["A way to import modules","A pattern where classes receive dependencies from an external source","A security feature","A database technique"],ans:1,explain:"DI is a design pattern where a class declares what it needs (in the constructor) and the framework provides it, rather than the class creating its own dependencies."},
+{q:"What decorator marks a class as an Angular service?",opts:["@Service","@Component","@Injectable","@Provider"],ans:2,explain:"@Injectable({ providedIn: 'root' }) marks a class as a service that can be injected. providedIn: 'root' makes it a singleton available everywhere."},
+{q:"What does HttpClient return?",opts:["A Promise","An Observable","A JSON object","A callback"],ans:1,explain:"HttpClient methods return Observables. You must .subscribe() to execute the HTTP request and receive the response."},
+{q:"What does <code>{ path: '**' }</code> match in routing?",opts:["The home page","All valid routes","Any unmatched URL (404)","All routes with parameters"],ans:2,explain:"The wildcard route ** matches any URL that doesn't match a defined route. It's used for 404 pages and must be last in the routes array."},
+{q:"What element marks where routed components appear?",opts:["<router-view>","<ng-outlet>","<router-outlet>","<app-root>"],ans:2,explain:"<router-outlet> is the placeholder in your template where Angular renders the component for the current route."},
+{q:"What does <code>providedIn: 'root'</code> mean?",opts:["Service is only in root component","Service is available app-wide as a singleton","Service must be provided manually","Service is created for each component"],ans:1,explain:"providedIn: 'root' makes the service a singleton — one shared instance is available across the entire application."},
+{q:"What pipe formats a number as currency?",opts:["money","format","currency","number"],ans:2,explain:"The currency pipe formats numbers as currency: {{ price | currency:'EUR' }} → €19.99"},
+{q:"What method navigates programmatically in Angular?",opts:["this.goto()","this.router.navigate()","window.location","this.route.go()"],ans:1,explain:"Use this.router.navigate(['/path']) to navigate programmatically. Inject Router via the constructor."}
+]
+},
+// ---- DAY 5: Java Basics ----
+{
+title:"Java Fundamentals",
+sub:"OOP, types, collections, syntax",
+icon:"JV",
+sections:[
+{title:"What is Java?",content:`<p>Java is a <strong>statically typed, compiled language</strong> created in 1995 (Sun Microsystems, now Oracle). Used for Android apps, backend services (Spring Boot), enterprise software, and big data.</p>
+<div class="warn-box"><strong>Java ≠ JavaScript!</strong> They are completely different languages.</div>
+<table><tr><th>Feature</th><th>Java</th><th>JavaScript/TypeScript</th></tr>
+<tr><td>Type system</td><td>Static, compiled</td><td>Dynamic (JS) / Static (TS)</td></tr>
+<tr><td>Runs on</td><td>JVM (Java Virtual Machine)</td><td>Browser or Node.js</td></tr>
+<tr><td>Entry point</td><td><code>public static void main()</code></td><td>Just start writing code</td></tr>
+<tr><td>Semicolons</td><td><strong>Required</strong></td><td>Optional</td></tr>
+<tr><td>OOP style</td><td>Class-based (everything in a class)</td><td>Prototype-based</td></tr></table>
+<pre><code class="language-java">// How Java compiles:
+// HelloWorld.java → javac → HelloWorld.class → java → Output!
+// (source code)   (compiler)  (bytecode)      (JVM)
+
+// Every Java file: one public class, filename MUST match
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}</code></pre>`},
+{title:"Variables & Types",content:`<pre><code class="language-java">// Primitive types
+int age = 25;              // whole numbers
+double price = 19.99;      // decimal numbers
+boolean isActive = true;   // true/false
+char grade = 'A';          // single character
+String name = "Sura";      // text (capital S — it's a class!)
+
+// Type conversion
+int x = 10;
+double y = x;           // Implicit (int → double, safe)
+int z = (int) 3.99;     // Explicit cast → 3 (truncates!)
+
+// String comparison — CLASSIC INTERVIEW QUESTION
+String a = "hello";
+String b = "hello";
+String c = new String("hello");
+
+a == b;        // true (same string pool reference)
+a == c;        // FALSE! (different objects)
+a.equals(c);   // TRUE! (compares actual content)
+// ALWAYS use .equals() for String comparison!</code></pre>
+<div class="warn-box"><strong>Interview classic:</strong> "What's the difference between == and .equals()?" — <code>==</code> compares references (memory addresses), <code>.equals()</code> compares actual content. Always use <code>.equals()</code> for Strings!</div>`},
+{title:"Classes & OOP",content:`<p>Java's four pillars of OOP:</p>
+<ol>
+<li><strong>Encapsulation</strong> — hide internal details, expose through methods</li>
+<li><strong>Inheritance</strong> — child classes reuse parent class code</li>
+<li><strong>Polymorphism</strong> — same method name, different behavior</li>
+<li><strong>Abstraction</strong> — show only essential details, hide complexity</li>
+</ol>
+<pre><code class="language-java">public class Animal {
+    private String name;    // encapsulated
+    protected int age;
+
+    public Animal(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String speak() {         // can be overridden
+        return name + " makes a sound";
+    }
+
+    public String getName() { return name; }  // getter
+}
+
+// Inheritance
+public class Dog extends Animal {
+    private String breed;
+
+    public Dog(String name, int age, String breed) {
+        super(name, age);  // call parent constructor
+        this.breed = breed;
+    }
+
+    @Override  // Polymorphism
+    public String speak() {
+        return getName() + " says Woof!";
+    }
+}</code></pre>`},
+{title:"Interfaces & Abstract Classes",content:`<pre><code class="language-java">// Interface — a contract (what to do, not how)
+public interface Describable {
+    String describe();  // no body — must be implemented
+}
+
+// Abstract class — partial implementation
+public abstract class Shape {
+    protected String color;
+
+    public Shape(String color) {
+        this.color = color;
+    }
+
+    // Abstract: subclass MUST implement
+    public abstract double getArea();
+
+    // Concrete: subclass inherits this
+    public String getColor() {
+        return color;
+    }
+}
+
+// A class implements interface, extends abstract class
+public class Circle extends Shape implements Describable {
+    private double radius;
+
+    public Circle(String color, double radius) {
+        super(color);
+        this.radius = radius;
+    }
+
+    @Override
+    public double getArea() {
+        return Math.PI * radius * radius;
+    }
+
+    @Override
+    public String describe() {
+        return color + " circle with radius " + radius;
+    }
+}</code></pre>
+<table><tr><th></th><th>Interface</th><th>Abstract Class</th></tr>
+<tr><td>Methods</td><td>Abstract only (Java 8+ can have default)</td><td>Abstract + concrete</td></tr>
+<tr><td>Variables</td><td>Constants only</td><td>Any variables</td></tr>
+<tr><td>Multiple</td><td>Can implement many</td><td>Can extend only one</td></tr>
+<tr><td>Constructor</td><td>No</td><td>Yes</td></tr></table>`},
+{title:"Collections",content:`<pre><code class="language-java">// ArrayList — dynamic array (most common)
+import java.util.ArrayList;
+import java.util.HashMap;
+
+ArrayList&lt;String&gt; names = new ArrayList&lt;&gt;();
+names.add("Alice");
+names.add("Bob");
+names.get(0);        // "Alice"
+names.size();        // 2
+names.remove("Bob"); // removes Bob
+
+// HashMap — key-value pairs (like JS objects)
+HashMap&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+scores.put("Alice", 95);
+scores.put("Bob", 87);
+scores.get("Alice");         // 95
+scores.containsKey("Bob");   // true
+
+// Loop through
+for (String name : names) {
+    System.out.println(name);
+}
+
+// Try-catch for error handling
+try {
+    int result = 10 / 0;
+} catch (ArithmeticException e) {
+    System.out.println("Error: " + e.getMessage());
+} finally {
+    System.out.println("Always runs");
+}</code></pre>`}
+],
+quizzes:[
+{q:"What is the entry point of every Java program?",opts:["function main()","def main():","public static void main(String[] args)","int main()"],ans:2,explain:"Every Java application starts with public static void main(String[] args) — it's the entry point the JVM calls."},
+{q:"How should you compare Strings in Java?",opts:["Using ==","Using .equals()","Using .compare()","Using ==="],ans:1,explain:"Use .equals() to compare String content. == compares object references (memory addresses), which can give wrong results."},
+{q:"What does JVM stand for?",opts:["Java Version Manager","Java Virtual Machine","JavaScript Virtual Module","Java Verified Method"],ans:1,explain:"Java Virtual Machine — it runs Java bytecode (.class files), enabling Java's 'Write Once, Run Anywhere' capability."},
+{q:"What are the four pillars of OOP?",opts:["Create, Read, Update, Delete","Encapsulation, Inheritance, Polymorphism, Abstraction","Classes, Objects, Methods, Properties","Input, Process, Output, Storage"],ans:1,explain:"The four pillars are: Encapsulation (hide details), Inheritance (reuse code), Polymorphism (same method, different behavior), Abstraction (hide complexity)."},
+{q:"What keyword creates a subclass in Java?",opts:["implements","inherits","extends","super"],ans:2,explain:"'extends' creates a subclass that inherits from a parent class. 'implements' is for interfaces."},
+{q:"Can a Java class implement multiple interfaces?",opts:["No, only one","Yes, multiple","Only with abstract classes","Only two"],ans:1,explain:"A class can implement multiple interfaces but can only extend one class. This is Java's way of achieving multiple inheritance."},
+{q:"What is the difference between ArrayList and array?",opts:["No difference","ArrayList has fixed size","ArrayList has dynamic size","Array is faster in all cases"],ans:2,explain:"ArrayList is dynamically sized (grows/shrinks). Regular arrays have a fixed size set at creation and cannot change."},
+{q:"What does the <code>static</code> keyword mean?",opts:["Variable can't change","Belongs to the class, not instances","Makes a method abstract","Prevents inheritance"],ans:1,explain:"static means the member belongs to the class itself, not to individual instances. You can call it without creating an object."},
+{q:"Must a Java filename match the public class name?",opts:["No, any name works","Yes, exactly","Only for main classes","Only in packages"],ans:1,explain:"The filename must exactly match the public class name (including capitalization). HelloWorld.java must contain public class HelloWorld."},
+{q:"What handles runtime errors in Java?",opts:["if/else","try/catch","throws/return","error/handle"],ans:1,explain:"try/catch blocks handle exceptions. Code that might fail goes in try, and the catch block handles the error gracefully."}
+]
+},
+// ---- DAY 6: Spring Boot ----
+{
+title:"Spring Boot",
+sub:"REST APIs, controllers, services, JPA",
+icon:"SB",
+sections:[
+{title:"What is Spring Boot?",content:`<p><strong>Spring Boot</strong> is a framework for building Java backend applications. Think of it like Express.js but for Java — it handles HTTP requests, connects to databases, and provides REST APIs.</p>
+<table><tr><th>npm / Node.js</th><th>Maven / Java</th></tr>
+<tr><td>package.json</td><td>pom.xml</td></tr>
+<tr><td>npm install</td><td>mvn install</td></tr>
+<tr><td>node_modules/</td><td>~/.m2/repository/</td></tr>
+<tr><td>npm start</td><td>mvn spring-boot:run</td></tr>
+<tr><td>npm run build</td><td>mvn package</td></tr></table>
+<pre><code class="language-java">// Entry point — just one annotation!
+@SpringBootApplication  // = @Configuration + @EnableAutoConfiguration + @ComponentScan
+public class MyApiApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MyApiApplication.class, args);
+    }
+}</code></pre>`},
+{title:"Three-Layer Architecture",content:`<pre><code class="language-java">// The request flows through three layers:
+//
+// HTTP Request
+//     ↓
+// [CONTROLLER]  → Handles HTTP, returns responses (@RestController)
+//     ↓
+// [SERVICE]     → Business logic, validation (@Service)
+//     ↓
+// [REPOSITORY]  → Database operations (@Repository / JpaRepository)
+//     ↓
+// [DATABASE]    → SQL, persists data
+//     ↓
+// Response flows back up</code></pre>
+<div class="tip-box"><strong>Interview answer:</strong> "Spring Boot uses a three-layer architecture: Controllers handle HTTP requests, Services contain business logic, and Repositories handle database operations. This separation makes the code organized, testable, and maintainable."</div>`},
+{title:"Complete REST API Example",content:`<pre><code class="language-java">// === MODEL / ENTITY ===
+@Entity
+@Table(name = "users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+    private String email;
+
+    // Constructors, getters, setters
+}
+
+// === REPOSITORY ===
+@Repository
+public interface UserRepository extends JpaRepository&lt;User, Long&gt; {
+    List&lt;User&gt; findByName(String name);  // Spring auto-generates query!
+}
+
+// === SERVICE ===
+@Service
+public class UserService {
+    private final UserRepository userRepository;
+
+    // Constructor injection (DI!)
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public List&lt;User&gt; getAllUsers() {
+        return userRepository.findAll();
+    }
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+}
+
+// === CONTROLLER ===
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping
+    public List&lt;User&gt; getAll() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public User getById(@PathVariable Long id) { ... }
+
+    @PostMapping
+    public User create(@RequestBody User user) {
+        return userService.createUser(user);
+    }
+
+    @PutMapping("/{id}")
+    public User update(@PathVariable Long id, @RequestBody User user) { ... }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) { ... }
+}</code></pre>`},
+{title:"Key Annotations (Memorize!)",content:`<table><tr><th>Annotation</th><th>Purpose</th></tr>
+<tr><td><code>@SpringBootApplication</code></td><td>Main class — enables auto-config</td></tr>
+<tr><td><code>@RestController</code></td><td>REST API controller (returns JSON)</td></tr>
+<tr><td><code>@GetMapping</code></td><td>Handle GET requests</td></tr>
+<tr><td><code>@PostMapping</code></td><td>Handle POST requests</td></tr>
+<tr><td><code>@PutMapping</code></td><td>Handle PUT requests (full update)</td></tr>
+<tr><td><code>@DeleteMapping</code></td><td>Handle DELETE requests</td></tr>
+<tr><td><code>@Service</code></td><td>Business logic layer</td></tr>
+<tr><td><code>@Repository</code></td><td>Data access layer</td></tr>
+<tr><td><code>@Entity</code></td><td>Maps class to database table</td></tr>
+<tr><td><code>@Autowired</code></td><td>Dependency injection (prefer constructor)</td></tr>
+<tr><td><code>@PathVariable</code></td><td>Value from URL path: <code>/users/{id}</code></td></tr>
+<tr><td><code>@RequestBody</code></td><td>JSON body → Java object</td></tr></table>`},
+{title:"HTTP Methods & Status Codes",content:`<table><tr><th>Method</th><th>Action</th><th>Has Body?</th><th>Idempotent?</th></tr>
+<tr><td>GET</td><td>Read</td><td>No</td><td>Yes</td></tr>
+<tr><td>POST</td><td>Create</td><td>Yes</td><td>No</td></tr>
+<tr><td>PUT</td><td>Update (full)</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>PATCH</td><td>Update (partial)</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>DELETE</td><td>Delete</td><td>No</td><td>Yes</td></tr></table>
+<table><tr><th>Code</th><th>Meaning</th><th>When Used</th></tr>
+<tr><td>200</td><td>OK</td><td>Successful GET, PUT</td></tr>
+<tr><td>201</td><td>Created</td><td>Successful POST</td></tr>
+<tr><td>204</td><td>No Content</td><td>Successful DELETE</td></tr>
+<tr><td>400</td><td>Bad Request</td><td>Invalid client data</td></tr>
+<tr><td>401</td><td>Unauthorized</td><td>Not authenticated</td></tr>
+<tr><td>403</td><td>Forbidden</td><td>No permission</td></tr>
+<tr><td>404</td><td>Not Found</td><td>Resource doesn't exist</td></tr>
+<tr><td>500</td><td>Server Error</td><td>Server-side bug</td></tr></table>`}
+],
+quizzes:[
+{q:"What annotation marks the main Spring Boot class?",opts:["@SpringApplication","@SpringBootApplication","@MainApplication","@EnableSpring"],ans:1,explain:"@SpringBootApplication combines @Configuration, @EnableAutoConfiguration, and @ComponentScan into one convenient annotation."},
+{q:"What annotation creates a REST controller?",opts:["@Controller","@RestController","@ApiController","@HttpController"],ans:1,explain:"@RestController = @Controller + @ResponseBody. It handles HTTP requests and automatically serializes return values to JSON."},
+{q:"What HTTP method is used to create a new resource?",opts:["GET","PUT","POST","PATCH"],ans:2,explain:"POST creates new resources. GET reads, PUT updates (full), PATCH updates (partial), DELETE removes."},
+{q:"What HTTP status code means 'Created'?",opts:["200","201","204","301"],ans:1,explain:"201 Created is returned after a successful POST that creates a new resource."},
+{q:"What are the three layers in Spring Boot architecture?",opts:["Model, View, Controller","Frontend, Backend, Database","Controller, Service, Repository","Request, Process, Response"],ans:2,explain:"Controller (HTTP handling) → Service (business logic) → Repository (database operations). Each has a clear responsibility."},
+{q:"What does <code>@PathVariable</code> extract?",opts:["Query parameters","JSON body fields","Values from the URL path","HTTP headers"],ans:2,explain:"@PathVariable extracts values from the URL path, e.g., @GetMapping('/{id}') with @PathVariable Long id extracts the id from /users/123."},
+{q:"What does <code>@RequestBody</code> do?",opts:["Returns the response body","Reads the URL path","Deserializes JSON body to Java object","Sets response headers"],ans:2,explain:"@RequestBody takes the JSON from the HTTP request body and converts it into a Java object automatically."},
+{q:"What is the Spring Boot equivalent of package.json?",opts:["build.gradle","application.properties","pom.xml","spring.config"],ans:2,explain:"pom.xml (Maven) is like package.json — it lists project dependencies, build configuration, and metadata."}
+]
+},
+// ---- DAY 7: Interview Questions (handled specially) ----
+{
+title:"Interview Questions & Review",
+sub:"63 Q&As, cheat sheets, tips",
+icon:"IV",
+sections:[],
+quizzes:[]
+}
+];
+
+// ============================
+// DATA: Interview Questions (Day 7)
+// ============================
+const INTERVIEW_QS = [
+// TypeScript (1-10)
+{cat:"TypeScript",q:"What is TypeScript? Why use it over JavaScript?",a:"<p>TypeScript is a <strong>superset of JavaScript</strong> that adds static typing. Benefits: catches errors at compile time, better IDE support (autocomplete, refactoring), self-documenting code. Angular uses TypeScript by default.</p>"},
+{cat:"TypeScript",q:"What are interfaces in TypeScript?",a:"<p>Interfaces define the <strong>shape/contract of an object</strong> — what properties it must have and their types. They're like blueprints. Example: <code>interface User { name: string; age: number; }</code></p>"},
+{cat:"TypeScript",q:"What is the difference between let and const?",a:"<p><code>let</code> declares a variable that can be reassigned. <code>const</code> declares a variable that cannot be reassigned (but objects/arrays can be mutated). Both are block-scoped. Avoid <code>var</code> (function-scoped, hoisted).</p>"},
+{cat:"TypeScript",q:"What are generics in TypeScript?",a:'<p>Generics let you write <strong>reusable code that works with multiple types</strong> while keeping type safety. Example: <code>function wrap&lt;T&gt;(value: T): T[] { return [value]; }</code> — works with any type but tracks which type was used.</p>'},
+{cat:"TypeScript",q:"What is the 'any' type and why avoid it?",a:"<p><code>any</code> disables type checking entirely — any value is allowed. Avoid it because it defeats the purpose of TypeScript. Use <code>unknown</code> if the type is truly unknown (forces you to check the type before using it).</p>"},
+{cat:"TypeScript",q:"What is the difference between type and interface?",a:"<p>Both define object shapes. <strong>Interfaces</strong> can be extended/merged and are preferred for object shapes. <strong>Type aliases</strong> can represent unions, primitives, tuples: <code>type Status = 'active' | 'inactive'</code>. Use interfaces for objects, types for unions.</p>"},
+{cat:"TypeScript",q:"What are union types?",a:"<p>Union types allow a value to be <strong>one of several types</strong>: <code>let value: string | number = 'hello';</code> The variable can hold a string OR a number. Use type narrowing (typeof checks) to handle each type safely.</p>"},
+{cat:"TypeScript",q:"What is an enum in TypeScript?",a:"<p>Enums are <strong>named constants</strong> that make code more readable: <code>enum Status { Active = 'ACTIVE', Inactive = 'INACTIVE' }</code>. Use string enums for clarity. They prevent magic strings/numbers scattered throughout code.</p>"},
+{cat:"TypeScript",q:"What is type narrowing?",a:"<p>Type narrowing is when TypeScript <strong>narrows a broad type to a more specific one</strong> based on checks: <code>if (typeof value === 'string') { value.toUpperCase(); }</code> Inside the if block, TS knows value is a string.</p>"},
+{cat:"TypeScript",q:"What are access modifiers in TypeScript?",a:"<p><code>public</code> — accessible everywhere (default). <code>private</code> — only within the class. <code>protected</code> — within the class and subclasses. Use private to hide implementation details (encapsulation).</p>"},
+// HTML/CSS (11-20)
+{cat:"HTML & CSS",q:"What is the difference between a div and a span?",a:"<p><code>&lt;div&gt;</code> is a <strong>block-level</strong> element (takes full width, stacks vertically). <code>&lt;span&gt;</code> is an <strong>inline</strong> element (only takes needed width, flows horizontally). Use div for layout sections, span for inline text styling.</p>"},
+{cat:"HTML & CSS",q:"What is Flexbox?",a:"<p>Flexbox is a CSS layout model for arranging items in <strong>rows or columns</strong>. Set <code>display: flex</code> on a container. Use <code>justify-content</code> for main-axis alignment, <code>align-items</code> for cross-axis. Used in ~90% of modern web layouts.</p>"},
+{cat:"HTML & CSS",q:"What is the CSS Box Model?",a:"<p>Every element is a box with four layers (outside to inside): <strong>Margin → Border → Padding → Content</strong>. Use <code>box-sizing: border-box</code> so width includes padding and border.</p>"},
+{cat:"HTML & CSS",q:"What is responsive design?",a:"<p>Designing websites that work on <strong>all screen sizes</strong> (desktop, tablet, phone). Techniques: media queries (<code>@media</code>), flexible units (rem, %, vw), flexbox/grid layouts, mobile-first approach.</p>"},
+{cat:"HTML & CSS",q:"What is semantic HTML?",a:"<p>Using <strong>meaningful tags</strong> like <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;footer&gt;</code> instead of generic <code>&lt;div&gt;</code>s. Better for accessibility (screen readers) and SEO.</p>"},
+{cat:"HTML & CSS",q:"What is the difference between class and id in CSS?",a:"<p><code>class</code> (<code>.name</code>) — reusable, multiple elements can share it. <code>id</code> (<code>#name</code>) — unique, only one element per page. IDs have higher specificity. Use classes for styling, IDs for unique elements.</p>"},
+{cat:"HTML & CSS",q:"What is CSS Grid?",a:"<p>CSS Grid is a 2D layout system for rows AND columns simultaneously: <code>display: grid; grid-template-columns: 1fr 1fr 1fr;</code>. Flexbox is 1D (row OR column), Grid is 2D (both at once).</p>"},
+{cat:"HTML & CSS",q:"What are media queries?",a:"<p>CSS rules that apply only when certain conditions are met: <code>@media (max-width: 768px) { ... }</code> applies styles only on screens 768px or narrower. Used to create responsive designs.</p>"},
+{cat:"HTML & CSS",q:"Difference between position: relative and position: absolute?",a:"<p><code>relative</code> — offsets from its <strong>normal position</strong> (still takes up original space). <code>absolute</code> — positioned relative to the <strong>nearest positioned ancestor</strong> (removed from normal flow).</p>"},
+{cat:"HTML & CSS",q:"Difference between px, rem, and %?",a:"<p><code>px</code> — fixed pixels (not responsive). <code>rem</code> — relative to root font-size (1rem = 16px default, responsive). <code>%</code> — relative to parent element. Use rem for fonts/spacing, % for widths.</p>"},
+// Angular (21-35)
+{cat:"Angular",q:"What is Angular and how is it different from React?",a:"<p>Angular is a <strong>full framework by Google</strong> (includes routing, forms, HTTP, testing). React is a <strong>UI library by Meta</strong> (just the view layer, need add-on libraries). Angular uses TypeScript by default, is more opinionated, has a steeper learning curve.</p>"},
+{cat:"Angular",q:"What is a component in Angular?",a:"<p>A component is a <strong>reusable building block</strong> that controls a piece of the UI. It has three files: .ts (logic), .html (template), .css (styles). Defined with the <code>@Component</code> decorator.</p>"},
+{cat:"Angular",q:"What is Dependency Injection? (KNOW THIS COLD!)",a:'<p>DI is a design pattern where a class <strong>receives its dependencies from an external source</strong> rather than creating them. In Angular, you declare what you need in the constructor: <code>constructor(private userService: UserService) {}</code> — Angular provides the instance. Benefits: testable, loosely coupled, singleton services.</p><div class="tip-box">This is THE most asked Angular interview question. Practice saying this answer out loud.</div>'},
+{cat:"Angular",q:"What is a service in Angular?",a:"<p>A service is a class decorated with <code>@Injectable</code> that handles <strong>business logic and data management</strong>, separate from the UI. Services are shared across components via Dependency Injection. Example: UserService that manages API calls.</p>"},
+{cat:"Angular",q:"What are lifecycle hooks? Name the most important ones.",a:"<p>Methods that Angular calls at specific moments in a component's life: <code>ngOnInit</code> (component ready — fetch data here), <code>ngOnChanges</code> (input values changed), <code>ngOnDestroy</code> (component removed — cleanup here). Don't use constructor for data fetching!</p>"},
+{cat:"Angular",q:"Template-driven vs reactive forms?",a:"<p><strong>Template-driven:</strong> Logic in HTML using ngModel, simpler, good for simple forms. <strong>Reactive:</strong> Logic in TypeScript using FormGroup/FormControl, more control, better for complex forms with dynamic validation. Reactive is preferred in production.</p>"},
+{cat:"Angular",q:"What is an Observable?",a:"<p>An Observable is a <strong>stream of data over time</strong> (from RxJS library). Unlike Promises (one value), Observables can emit multiple values. HttpClient returns Observables. You must <code>.subscribe()</code> to get values.</p>"},
+{cat:"Angular",q:"Difference between @Input and @Output?",a:"<p><code>@Input()</code> — passes data <strong>parent → child</strong> (like React props). <code>@Output()</code> — sends events <strong>child → parent</strong> (like React callbacks). @Output uses EventEmitter.</p>"},
+{cat:"Angular",q:"What is routing in Angular?",a:"<p>Routing maps URLs to components, enabling <strong>navigation without page reloads</strong> (SPA). Define routes in a Routes array, use <code>&lt;router-outlet&gt;</code> as placeholder, navigate with <code>routerLink</code> or <code>router.navigate()</code>.</p>"},
+{cat:"Angular",q:"What are *ngIf and *ngFor?",a:"<p><strong>Structural directives</strong> that modify the DOM. <code>*ngIf</code> conditionally renders an element. <code>*ngFor</code> loops through an array creating an element for each item. Cannot use both on the same element.</p>"},
+{cat:"Angular",q:"What is two-way data binding?",a:'<p><code>[(ngModel)]</code> syncs data in <strong>both directions</strong> — typing in an input updates the variable, and changing the variable updates the input. Called "banana in a box." Requires FormsModule.</p>'},
+{cat:"Angular",q:"What is a module in Angular?",a:"<p>A module (<code>@NgModule</code>) is a <strong>container that groups related components, services, and other modules</strong>. Every app has a root module (AppModule). Modules declare components, import other modules, and provide services.</p>"},
+{cat:"Angular",q:"What are pipes in Angular?",a:"<p>Pipes <strong>transform data for display</strong> in templates without changing the source: <code>{{ birthday | date:'longDate' }}</code>, <code>{{ price | currency:'EUR' }}</code>, <code>{{ name | uppercase }}</code>. You can create custom pipes too.</p>"},
+{cat:"Angular",q:"What is an Angular directive?",a:"<p>Directives modify DOM elements. <strong>Structural directives</strong> (*ngIf, *ngFor) add/remove elements. <strong>Attribute directives</strong> (ngClass, ngStyle) change appearance/behavior. Components are actually directives with templates.</p>"},
+{cat:"Angular",q:"What is HttpClient in Angular?",a:"<p>HttpClient is Angular's built-in service for making <strong>HTTP requests</strong> to APIs. Import HttpClientModule, inject HttpClient, call methods like <code>.get()</code>, <code>.post()</code>. Returns Observables.</p>"},
+// Java (36-45)
+{cat:"Java",q:"What is Java and how does it work (JVM)?",a:"<p>Java is a statically typed, compiled language. Java source code (.java) is compiled to <strong>bytecode</strong> (.class) by javac, then run by the <strong>JVM (Java Virtual Machine)</strong>. This enables 'Write Once, Run Anywhere' — bytecode runs on any platform with a JVM.</p>"},
+{cat:"Java",q:"What is OOP? Name the four pillars.",a:"<p>Object-Oriented Programming organizes code into objects. Four pillars: <strong>Encapsulation</strong> (hide internal details), <strong>Inheritance</strong> (reuse parent code), <strong>Polymorphism</strong> (same method, different behavior), <strong>Abstraction</strong> (show only essentials).</p>"},
+{cat:"Java",q:"Difference between interface and abstract class?",a:"<p><strong>Interface:</strong> pure contract (abstract methods only, no constructor, can implement multiple). <strong>Abstract class:</strong> partial implementation (can have concrete methods, constructor, fields; can only extend one). Use interfaces for capability (Comparable), abstract classes for shared base code.</p>"},
+{cat:"Java",q:"What is a constructor?",a:"<p>A constructor is a <strong>special method called when an object is created</strong> with <code>new</code>. Same name as the class, no return type. Initializes the object's state. Java provides a default no-arg constructor if you don't write one.</p>"},
+{cat:"Java",q:"What are access modifiers in Java?",a:"<p><code>public</code> — accessible everywhere. <code>protected</code> — same package + subclasses. <code>(default/package)</code> — same package only. <code>private</code> — same class only. Use private for fields, public for methods (encapsulation).</p>"},
+{cat:"Java",q:"Difference between ArrayList and array?",a:"<p>Arrays have <strong>fixed size</strong> set at creation. ArrayList is <strong>dynamically sized</strong> (grows/shrinks). ArrayList has methods like add(), remove(), contains(). Arrays use primitive types; ArrayList uses wrapper classes (Integer, not int).</p>"},
+{cat:"Java",q:"Difference between == and .equals()? (Classic!)",a:'<p><code>==</code> compares <strong>references</strong> (memory addresses). <code>.equals()</code> compares <strong>actual content/values</strong>. For Strings: <code>"hello" == new String("hello")</code> is FALSE, <code>"hello".equals(new String("hello"))</code> is TRUE. Always use .equals() for objects!</p><div class="warn-box">This is a classic interview trick question. Get it right!</div>'},
+{cat:"Java",q:"What is the static keyword?",a:"<p><code>static</code> means the member belongs to the <strong>class itself, not instances</strong>. You can call static methods without creating an object: <code>Math.max(5, 10)</code>. Static fields are shared across all instances.</p>"},
+{cat:"Java",q:"What is an exception? How do you handle them?",a:"<p>An exception is a <strong>runtime error</strong>. Handle with try/catch: code that might fail in <code>try</code>, error handling in <code>catch</code>, cleanup in <code>finally</code> (always runs). Checked exceptions must be caught; unchecked (RuntimeException) are optional.</p>"},
+{cat:"Java",q:"What are Collections in Java?",a:"<p>The Collections framework provides <strong>data structures</strong>: <code>ArrayList</code> (dynamic array), <code>HashSet</code> (unique elements), <code>HashMap</code> (key-value pairs), <code>LinkedList</code> (linked nodes). All in <code>java.util</code> package.</p>"},
+// Spring Boot (46-55)
+{cat:"Spring Boot",q:"What is Spring Boot?",a:"<p>Spring Boot is a framework for building <strong>Java backend applications</strong> with minimal configuration. It auto-configures sensible defaults, includes an embedded server (Tomcat), and follows convention over configuration. Like Express.js for Java.</p>"},
+{cat:"Spring Boot",q:"What is a REST API?",a:"<p>REST (Representational State Transfer) is an architectural style for web APIs. Uses <strong>HTTP methods</strong> (GET, POST, PUT, DELETE) on <strong>resources</strong> (URLs like /api/users). Stateless, returns JSON. Each endpoint represents a resource.</p>"},
+{cat:"Spring Boot",q:"What are HTTP methods and when do you use each?",a:"<p><strong>GET</strong> — read data. <strong>POST</strong> — create new. <strong>PUT</strong> — update (full replace). <strong>PATCH</strong> — update (partial). <strong>DELETE</strong> — remove. GET and DELETE have no body; POST/PUT/PATCH send JSON body.</p>"},
+{cat:"Spring Boot",q:"What is @RestController?",a:"<p><code>@RestController</code> = <code>@Controller</code> + <code>@ResponseBody</code>. It marks a class as a <strong>REST API endpoint handler</strong>. Methods return objects that are automatically serialized to JSON.</p>"},
+{cat:"Spring Boot",q:"Difference between @GetMapping and @PostMapping?",a:"<p><code>@GetMapping</code> handles <strong>GET requests</strong> (reading data). <code>@PostMapping</code> handles <strong>POST requests</strong> (creating data, with a JSON body). Similarly: @PutMapping (update), @DeleteMapping (delete).</p>"},
+{cat:"Spring Boot",q:"Explain the Controller → Service → Repository pattern.",a:"<p><strong>Controller:</strong> receives HTTP requests, delegates to service, returns responses. <strong>Service:</strong> contains business logic, validation, orchestration. <strong>Repository:</strong> handles database operations (CRUD). Each layer has a single responsibility.</p>"},
+{cat:"Spring Boot",q:"What is Dependency Injection in Spring?",a:"<p>Same concept as Angular! Spring creates and manages objects (beans). Instead of <code>new UserService()</code>, declare it in the constructor and Spring provides it. Prefer <strong>constructor injection</strong> over @Autowired on fields.</p>"},
+{cat:"Spring Boot",q:"What is @Autowired?",a:"<p><code>@Autowired</code> tells Spring to <strong>inject a dependency</strong> automatically. Can be used on fields, constructors, or setters. <strong>Constructor injection is preferred</strong> — it's cleaner and makes dependencies explicit.</p>"},
+{cat:"Spring Boot",q:"What is application.properties?",a:"<p>Configuration file for Spring Boot: database URL, server port, logging level, etc. Example: <code>server.port=8080</code>, <code>spring.datasource.url=jdbc:h2:mem:testdb</code>. Like .env files in Node.js.</p>"},
+{cat:"Spring Boot",q:"What is JPA and what is an Entity?",a:"<p><strong>JPA</strong> (Java Persistence API) maps Java objects to database tables. An <strong>@Entity</strong> class represents a table. Fields become columns. <code>@Id</code> marks the primary key. JpaRepository provides CRUD operations automatically.</p>"},
+// General/DevOps (56-63)
+{cat:"General & DevOps",q:"What is Kubernetes?",a:"<p>Kubernetes (K8s) is a <strong>container orchestration platform</strong>. It manages, scales, and deploys containerized applications automatically. Handles load balancing, self-healing (restarts failed containers), rolling updates, and scaling up/down.</p>"},
+{cat:"General & DevOps",q:"What is Docker?",a:"<p>Docker <strong>packages applications into containers</strong> — lightweight, portable environments that include everything needed to run (code, runtime, libraries). 'Works on my machine' problem solved. A Dockerfile defines how to build the container.</p>"},
+{cat:"General & DevOps",q:"What is CI/CD?",a:"<p><strong>CI (Continuous Integration):</strong> automatically build and test code on every push. <strong>CD (Continuous Deployment/Delivery):</strong> automatically deploy to production after tests pass. Pipeline: push code → build → test → deploy. Tools: Jenkins, GitHub Actions, Azure DevOps.</p>"},
+{cat:"General & DevOps",q:"What is Git and why is it important?",a:"<p>Git is a <strong>distributed version control system</strong>. It tracks code changes, enables collaboration (branching, merging), and maintains history. Key commands: clone, branch, commit, push, pull, merge. Essential for any development team.</p>"},
+{cat:"General & DevOps",q:"What is Azure?",a:"<p>Azure is <strong>Microsoft's cloud platform</strong>. It provides infrastructure (VMs, storage), platform services (App Service, SQL Database), and tools (Azure DevOps, Kubernetes Service). Many companies use Azure for hosting and deployment.</p>"},
+{cat:"General & DevOps",q:"What is an API?",a:"<p>API (Application Programming Interface) is a <strong>contract for how software communicates</strong>. A REST API uses HTTP to exchange data (usually JSON) between frontend and backend. Like a waiter between you (client) and the kitchen (server).</p>"},
+{cat:"General & DevOps",q:"Difference between frontend and backend?",a:"<p><strong>Frontend:</strong> what users see and interact with (HTML, CSS, TypeScript, Angular). Runs in the browser. <strong>Backend:</strong> server-side logic, database operations, APIs (Java, Spring Boot). They communicate via HTTP/JSON.</p>"},
+{cat:"General & DevOps",q:"What is Agile/Scrum?",a:"<p><strong>Agile:</strong> iterative development methodology — deliver small increments frequently. <strong>Scrum:</strong> Agile framework with sprints (1-4 weeks), daily standups, sprint reviews. Roles: Product Owner, Scrum Master, Development Team.</p>"},
+// Bonus Behavioral
+{cat:"Behavioral",q:"Tell me about yourself.",a:'<p>Structure: Present → Past → Future. "I\'m a developer with experience in React and TypeScript, currently expanding my skills to Angular and Spring Boot. I built a recruitment management platform using component-based architecture and REST API integration. I\'m excited about this role because I want to grow as a full-stack engineer and contribute to real-world financial software."</p>'},
+{cat:"Behavioral",q:"Why do you want this job?",a:'<p>Mention: the company, the tech stack (Angular + Spring Boot), growth opportunity. "I\'m drawn to your company because you build impactful software. The full-stack role with Angular and Spring Boot aligns perfectly with where I want to grow. I\'m excited to learn from experienced engineers and contribute to meaningful projects."</p>'},
+{cat:"Behavioral",q:"Tell me about a challenging project.",a:'<p>Use STAR method: <strong>Situation</strong> (built a recruitment platform), <strong>Task</strong> (design component architecture), <strong>Action</strong> (applied single responsibility principle, created reusable components, integrated REST APIs), <strong>Result</strong> (working application, learned importance of planning architecture before coding).</p>'},
+{cat:"Behavioral",q:"How do you handle not knowing something?",a:'<p>"I\'m honest about what I don\'t know, but I always show how I\'d learn. I start by reading documentation, then try small experiments, and ask colleagues if I\'m stuck. For example, Angular was new to me, but by connecting it to my React knowledge, I learned the concepts quickly."</p>'}
+];
+
+// ============================
+// DATA: Cheat Sheet
+// ============================
+const CHEAT_SHEET = `<h2>Cheat Sheet</h2>
+<h3>TypeScript</h3>
+<pre><code class="language-typescript">// Variables
+const name: string = "Sura";
+let age: number = 25;
+
+// Interface
+interface User {
+  name: string;
+  age: number;
+  email?: string;  // optional
+}
+
+// Function
+function greet(name: string): string {
+  return "Hello, " + name + "!";
+}
+
+// Arrow function
+const add = (a: number, b: number): number => a + b;
+
+// Class
+class Animal {
+  constructor(
+    public name: string,
+    private sound: string
+  ) {}
+}
+
+// Enum
+enum Status { Active = "ACTIVE", Inactive = "INACTIVE" }
+
+// Generic
+function wrap<T>(val: T): T[] { return [val]; }
+
+// Union type
+type ID = string | number;</code></pre>
+
+<h3>Angular</h3>
+<pre><code class="language-typescript">// Component
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html'
+})
+export class UserComponent implements OnInit {
+  @Input() userId: number;
+  @Output() deleted = new EventEmitter<number>();
+
+  constructor(private svc: UserService) {} // DI!
+
+  ngOnInit(): void { /* fetch data */ }
+  ngOnDestroy(): void { /* cleanup */ }
+}</code></pre>
+<p><strong>Template syntax:</strong></p>
+<ul>
+<li><code>{{ title }}</code> — interpolation</li>
+<li><code>[src]="url"</code> — property binding</li>
+<li><code>(click)="fn()"</code> — event binding</li>
+<li><code>[(ngModel)]="val"</code> — two-way</li>
+<li><code>*ngIf="show"</code> — conditional</li>
+<li><code>*ngFor="let x of items"</code> — loop</li>
+<li><code>{{ date | date:'short' }}</code> — pipe</li>
+</ul>
+
+<h3>Java</h3>
+<pre><code class="language-java">// Entry point
+public static void main(String[] args) {}
+
+// String comparison: .equals() NOT ==
+"hello".equals(otherString);
+
+// ArrayList
+ArrayList<String> list = new ArrayList<>();
+list.add("item"); list.get(0); list.size();
+
+// HashMap
+HashMap<String, Integer> map = new HashMap<>();
+map.put("key", 1); map.get("key");
+
+// Four OOP Pillars:
+// Encapsulation, Inheritance,
+// Polymorphism, Abstraction</code></pre>
+
+<h3>Spring Boot</h3>
+<pre><code class="language-java">@SpringBootApplication       // Main class
+@RestController              // REST endpoints
+@Service                     // Business logic
+@Repository                  // Database access
+@Entity                      // DB table mapping
+
+@GetMapping("/users")        // GET
+@PostMapping("/users")       // POST
+@PutMapping("/users/{id}")   // PUT
+@DeleteMapping("/users/{id}")// DELETE
+
+@PathVariable Long id        // From URL
+@RequestBody User user       // From JSON body</code></pre>
+
+<h3>HTTP Status Codes</h3>
+<ul>
+<li><strong>200</strong> OK — success</li>
+<li><strong>201</strong> Created — POST success</li>
+<li><strong>204</strong> No Content — DELETE success</li>
+<li><strong>400</strong> Bad Request</li>
+<li><strong>401</strong> Unauthorized</li>
+<li><strong>403</strong> Forbidden</li>
+<li><strong>404</strong> Not Found</li>
+<li><strong>500</strong> Server Error</li>
+</ul>
+
+<h3>Architecture Flow</h3>
+<p><strong>Angular</strong> (Component → Service → HttpClient) → <strong>HTTP/JSON</strong> → <strong>Spring Boot</strong> (Controller → Service → Repository) → <strong>Database</strong></p>
+
+<h3>React → Angular Mapping</h3>
+<ul>
+<li>Component (function) → Component (class + @Component)</li>
+<li>Props → @Input()</li>
+<li>Callbacks → @Output() + EventEmitter</li>
+<li>useState → Class properties</li>
+<li>useEffect → ngOnInit / ngOnDestroy</li>
+<li>Context → Services + DI</li>
+<li>React Router → Angular Router</li>
+</ul>`;
+
+// ============================
+// APP ENGINE
+// ============================
+let currentDay = -1; // -1 = home
+
+function getProgress() {
+  return JSON.parse(localStorage.getItem('ortec-progress') || '{}');
+}
+function saveProgress(p) {
+  localStorage.setItem('ortec-progress', JSON.stringify(p));
+}
+
+function getDayProgress(dayIdx) {
+  const p = getProgress();
+  const key = 'day' + dayIdx;
+  if (!p[key]) return { sections: {}, quizzes: {} };
+  return p[key];
+}
+function setDayProgress(dayIdx, data) {
+  const p = getProgress();
+  p['day' + dayIdx] = data;
+  saveProgress(p);
+}
+
+function getDayCompletionPct(dayIdx) {
+  const dp = getDayProgress(dayIdx);
+  const day = DAYS[dayIdx];
+  if (!day) return 0;
+  // Day 7 special: track flashcard reveals
+  if (dayIdx === 6) {
+    const total = INTERVIEW_QS.length;
+    if (total === 0) return 0;
+    const done = dp.sections ? Object.keys(dp.sections).length : 0;
+    return Math.round((done / total) * 100);
+  }
+  const totalSections = day.sections ? day.sections.length : 0;
+  const totalQuizzes = day.quizzes ? day.quizzes.length : 0;
+  const total = totalSections + totalQuizzes;
+  if (total === 0) return 0;
+  let done = 0;
+  if (dp.sections) done += Object.keys(dp.sections).length;
+  if (dp.quizzes) done += Object.keys(dp.quizzes).length;
+  return Math.round((done / total) * 100);
+}
+
+function renderSidebar() {
+  const sb = document.getElementById('sidebar');
+  let html = '<h1>Interview Prep<small>Junior Full-Stack Engineer</small></h1>';
+  html += '<div class="nav-item' + (currentDay === -1 ? ' active' : '') + '" onclick="navigate(-1)">';
+  html += '<div class="day-num" style="background:var(--accent2)">H</div>';
+  html += '<div class="day-info"><div class="day-title">Home</div><div class="day-sub">Overview & Progress</div></div></div>';
+  DAYS.forEach((d, i) => {
+    const pct = getDayCompletionPct(i);
+    const dotClass = pct >= 100 ? 'done' : pct > 0 ? 'partial' : '';
+    html += '<div class="nav-item' + (currentDay === i ? ' active' : '') + '" onclick="navigate(' + i + ')">';
+    html += '<div class="day-num">' + (i + 1) + '</div>';
+    html += '<div class="day-info"><div class="day-title">' + d.title + '</div><div class="day-sub">' + d.sub + '</div></div>';
+    html += '<div class="progress-dot ' + dotClass + '"></div></div>';
+  });
+  html += '<div class="sidebar-footer"><button onclick="toggleCheat()">Cheat Sheet</button>';
+  html += '<br><button class="reset-btn" style="width:100%;margin-top:8px" onclick="if(confirm(\'Reset all progress?\')){localStorage.removeItem(\'ortec-progress\');location.reload()}">Reset Progress</button></div>';
+  sb.innerHTML = html;
+}
+
+function navigate(dayIdx) {
+  currentDay = dayIdx;
+  renderSidebar();
+  if (dayIdx === -1) renderHome();
+  else if (dayIdx === 6) renderDay7();
+  else renderDay(dayIdx);
+  document.getElementById('sidebar').classList.remove('open');
+  window.scrollTo(0, 0);
+}
+
+function renderHome() {
+  const m = document.getElementById('main');
+  let totalPct = 0;
+  DAYS.forEach((_, i) => totalPct += getDayCompletionPct(i));
+  totalPct = Math.round(totalPct / DAYS.length);
+  let html = '<div class="home-hero"><h2>Interview Prep Dashboard</h2>';
+  html += '<p>7-day study plan for Junior Full-Stack Engineer</p>';
+  html += '<p style="font-size:.9rem;color:var(--text2)">Overall Progress: ' + totalPct + '%</p>';
+  html += '<div class="progress-bar"><div class="progress-fill" style="width:' + totalPct + '%"></div></div></div>';
+  html += '<div class="day-cards">';
+  DAYS.forEach((d, i) => {
+    const pct = getDayCompletionPct(i);
+    html += '<div class="day-card" onclick="navigate(' + i + ')"><h3>Day ' + (i + 1) + ': ' + d.title + '</h3>';
+    html += '<p>' + d.sub + '</p>';
+    html += '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div>';
+    html += '<span style="font-size:.75rem;color:var(--text2)">' + pct + '% complete</span></div>';
+  });
+  html += '</div>';
+  m.innerHTML = html;
+}
+
+function esc(s) { return s.replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderDay(idx) {
+  const day = DAYS[idx];
+  if (!day) return;
+  const dp = getDayProgress(idx);
+  if (!dp.sections) dp.sections = {};
+  if (!dp.quizzes) dp.quizzes = {};
+  const m = document.getElementById('main');
+  const pct = getDayCompletionPct(idx);
+  let html = '<h2>Day ' + (idx + 1) + ': ' + day.title + '</h2>';
+  html += '<p style="color:var(--text2);margin-bottom:4px">' + day.sub + '</p>';
+  html += '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div>';
+
+  // Sections
+  if (day.sections) {
+    day.sections.forEach((s, si) => {
+      const checked = dp.sections[si] ? ' checked' : '';
+      html += '<div class="section-block"><div class="check-item' + (dp.sections[si] ? ' checked' : '') + '">';
+      html += '<input type="checkbox"' + checked + ' onchange="toggleSection(' + idx + ',' + si + ',this.checked)">';
+      html += '<strong>' + s.title + '</strong></div>';
+      html += '<div>' + s.content + '</div></div>';
+    });
+  }
+
+  // Quizzes
+  if (day.quizzes && day.quizzes.length > 0) {
+    html += '<h3>Quiz — Test Your Knowledge</h3>';
+    day.quizzes.forEach((q, qi) => {
+      const answered = dp.quizzes[qi] !== undefined;
+      html += '<div class="quiz-block" id="quiz-' + idx + '-' + qi + '">';
+      html += '<div class="q-title">Q' + (qi + 1) + ': ' + q.q + '</div>';
+      q.opts.forEach((o, oi) => {
+        let cls = 'quiz-option';
+        if (answered) {
+          if (oi === q.ans) cls += ' correct';
+          else if (oi === dp.quizzes[qi] && oi !== q.ans) cls += ' wrong';
+        }
+        const disabled = answered ? ' style="pointer-events:none"' : '';
+        html += '<div class="' + cls + '"' + disabled + ' onclick="answerQuiz(' + idx + ',' + qi + ',' + oi + ')">' + o + '</div>';
+      });
+      if (answered) {
+        const isCorrect = dp.quizzes[qi] === q.ans;
+        html += '<div class="quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong') + '">';
+        html += (isCorrect ? '&#10004; Correct! ' : '&#10008; Incorrect. ') + q.explain + '</div>';
+      }
+      html += '</div>';
+    });
+  }
+  m.innerHTML = html;
+  Prism.highlightAll();
+}
+
+function toggleSection(dayIdx, secIdx, checked) {
+  const dp = getDayProgress(dayIdx);
+  if (!dp.sections) dp.sections = {};
+  if (checked) dp.sections[secIdx] = true;
+  else delete dp.sections[secIdx];
+  setDayProgress(dayIdx, dp);
+  renderSidebar();
+}
+
+function answerQuiz(dayIdx, qIdx, optIdx) {
+  const dp = getDayProgress(dayIdx);
+  if (!dp.quizzes) dp.quizzes = {};
+  if (dp.quizzes[qIdx] !== undefined) return;
+  dp.quizzes[qIdx] = optIdx;
+  setDayProgress(dayIdx, dp);
+  renderDay(dayIdx);
+  renderSidebar();
+}
+
+function renderDay7() {
+  const dp = getDayProgress(6);
+  if (!dp.sections) dp.sections = {};
+  const m = document.getElementById('main');
+  const pct = getDayCompletionPct(6);
+  let html = '<h2>Day 7: Interview Questions & Review</h2>';
+  html += '<p style="color:var(--text2)">63 questions across all topics — click to reveal answers</p>';
+  html += '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div>';
+
+  const categories = {};
+  INTERVIEW_QS.forEach((q, i) => {
+    if (!categories[q.cat]) categories[q.cat] = [];
+    categories[q.cat].push({ ...q, idx: i });
+  });
+
+  Object.keys(categories).forEach(cat => {
+    html += '<div class="cat-header"><span>' + cat + '</span></div>';
+    categories[cat].forEach(q => {
+      const isOpen = dp.sections[q.idx];
+      html += '<div class="flashcard' + (isOpen ? ' open' : '') + '" id="fc-' + q.idx + '">';
+      html += '<div class="fc-q" onclick="toggleFlashcard(' + q.idx + ')">';
+      html += '<div><span class="fc-num">Q' + (q.idx + 1) + '</span> ' + q.q + '</div>';
+      html += '<span class="fc-arrow">&#9654;</span></div>';
+      html += '<div class="fc-a' + (isOpen ? ' open' : '') + '">' + q.a + '</div></div>';
+    });
+  });
+  m.innerHTML = html;
+  Prism.highlightAll();
+}
+
+function toggleFlashcard(idx) {
+  const dp = getDayProgress(6);
+  if (!dp.sections) dp.sections = {};
+  if (dp.sections[idx]) delete dp.sections[idx];
+  else dp.sections[idx] = true;
+  setDayProgress(6, dp);
+  const fc = document.getElementById('fc-' + idx);
+  fc.classList.toggle('open');
+  fc.querySelector('.fc-a').classList.toggle('open');
+  renderSidebar();
+}
+
+function toggleCheat() {
+  document.getElementById('cheatPanel').classList.toggle('open');
+  document.getElementById('cheatOverlay').classList.toggle('open');
+}
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function renderCheatSheet() {
+  document.getElementById('cheatPanel').innerHTML = '<span class="close-btn" onclick="toggleCheat()">&times;</span>' + CHEAT_SHEET;
+}
+
+// INIT
+renderSidebar();
+renderHome();
+renderCheatSheet();
+</script>
+</body>
+</html>

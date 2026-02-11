@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================================
+  FILE: 02-forms.html
+  WHAT YOU'LL LEARN: How to build forms -- text boxes, dropdowns, checkboxes, etc.
+
+  WHY THIS MATTERS:
+    Forms are EVERYWHERE in web apps:
+      - Login pages (email + password)
+      - Sign-up pages (name, email, password, etc.)
+      - Search bars
+      - Settings pages
+      - Contact forms
+
+    When you work with Angular, you'll build forms ALL THE TIME using
+    Angular's Reactive Forms or Template-Driven Forms. But first,
+    you need to understand the raw HTML form elements.
+
+  HOW TO USE:
+    1. Open this file in your browser
+    2. Try typing in the inputs, clicking checkboxes, selecting dropdowns
+    3. Then read the code + comments to understand each element
+  ==========================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02 - HTML Forms</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    .example-box {
+      background-color: #fff;
+      border: 2px solid #2196F3;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .example-box h3 {
+      color: #2196F3;
+      margin-top: 0;
+    }
+    .note {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 10px 15px;
+      margin: 15px 0;
+    }
+    .critical {
+      background-color: #f8d7da;
+      border-left: 4px solid #dc3545;
+      padding: 10px 15px;
+      margin: 15px 0;
+    }
+    code {
+      background-color: #e8e8e8;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+    hr {
+      border: none;
+      border-top: 2px solid #ddd;
+      margin: 30px 0;
+    }
+    /* Form styling so it looks clean */
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: #2196F3;
+      outline: none;
+    }
+    button, input[type="submit"] {
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    button:hover, input[type="submit"]:hover {
+      background-color: #1976D2;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Lesson 2: HTML Forms</h1>
+  <p>Forms are how users INPUT data on a website. Every login page, every sign-up page,
+  every search bar -- they're all forms. Let's learn every form element you need to know.</p>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- THE <form> TAG                                                  -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>The &lt;form&gt; Tag</h3>
+
+    <!--
+      THE <form> TAG
+      ==============
+      The <form> tag WRAPS all your input fields. It groups them together
+      and tells the browser "these inputs are all part of one form."
+
+      KEY ATTRIBUTES:
+        action = WHERE to send the data when the form is submitted
+                 (a URL, usually a server endpoint)
+        method = HOW to send the data
+                 "GET" = data goes in the URL (for searches)
+                 "POST" = data is sent hidden (for passwords, sensitive data)
+
+      In Angular, you won't use action/method much because Angular
+      handles form submission in TypeScript code instead.
+      But you still NEED the <form> tag.
+    -->
+
+    <p>Every form starts with the <code>&lt;form&gt;</code> tag:</p>
+    <pre><code>&lt;form action="/submit" method="POST"&gt;
+  ... your inputs go here ...
+&lt;/form&gt;</code></pre>
+
+    <div class="note">
+      <strong>For now:</strong> We won't use <code>action</code> or <code>method</code>
+      in our examples because we have no server to send data to.
+      In Angular, form submission is handled differently (in TypeScript).
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- TEXT INPUTS                                                     -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Text Inputs</h3>
+
+    <form>
+      <!--
+        THE <label> TAG
+        ===============
+        A label tells the user what an input is for.
+
+        CRITICAL: Always connect a label to its input using the "for" attribute.
+        The "for" value must match the input's "id" value.
+
+        WHY?
+        1. Clicking the label focuses the input (better user experience)
+        2. Screen readers read the label so blind users know what to type
+        3. Interviewers WILL notice if you skip labels
+
+        Try clicking the word "Your Name" below -- it will focus the text box!
+      -->
+
+      <label for="username">Your Name:</label>
+      <!--
+        for="username" connects this label to the input with id="username"
+        Click this label text -- watch the input get focused!
+      -->
+
+      <input type="text" id="username" name="username" placeholder="Enter your name">
+      <!--
+        THE <input> TAG
+        ================
+        <input> is the most versatile form element. It changes behavior
+        based on its "type" attribute.
+
+        type="text"     = A regular text box (the default)
+        id="username"   = A unique identifier (used by the label's "for" attribute)
+        name="username" = The name of this data field (sent to the server)
+        placeholder     = Gray hint text shown when the input is empty
+
+        <input> is SELF-CLOSING (no </input> needed).
+      -->
+
+      <label for="useremail">Email Address:</label>
+      <input type="email" id="useremail" name="useremail" placeholder="you@example.com">
+      <!--
+        type="email"
+        ============
+        Looks the same as type="text" but:
+        - On phones, it shows a keyboard with the @ symbol
+        - The browser validates that it looks like an email
+        - Try typing "hello" and submitting -- the browser will complain!
+      -->
+
+      <label for="userpassword">Password:</label>
+      <input type="password" id="userpassword" name="userpassword" placeholder="Enter your password">
+      <!--
+        type="password"
+        ===============
+        The text you type is HIDDEN (shown as dots: *****)
+        The data is NOT encrypted though -- it's just visually hidden.
+        Real security comes from HTTPS and server-side handling.
+      -->
+
+      <label for="userage">Age:</label>
+      <input type="number" id="userage" name="userage" placeholder="25" min="1" max="120">
+      <!--
+        type="number"
+        =============
+        Only allows numbers. Shows up/down arrows.
+
+        min="1" = minimum value allowed
+        max="120" = maximum value allowed
+
+        Try typing letters -- the browser won't let you!
+      -->
+
+      <div class="note" style="margin-top: 20px;">
+        <strong>The "name" attribute:</strong> When a form is submitted, the data is sent
+        as key-value pairs. The <code>name</code> attribute is the KEY.
+        <br>So if you type "Sura" in the name field, the server receives:
+        <code>username=Sura</code>
+      </div>
+    </form>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- TEXTAREA                                                        -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Textarea (Multi-line Text)</h3>
+
+    <form>
+      <label for="bio">Tell us about yourself:</label>
+      <textarea id="bio" name="bio" rows="5" placeholder="Write something about yourself..."></textarea>
+      <!--
+        THE <textarea> TAG
+        ===================
+        Unlike <input type="text"> which is a SINGLE line,
+        <textarea> allows MULTIPLE lines of text.
+
+        Use it for: comments, descriptions, bios, messages, etc.
+
+        rows="5" = how many lines tall it starts as (user can resize it)
+
+        IMPORTANT: <textarea> is NOT self-closing!
+        It has an opening and closing tag: <textarea></textarea>
+        Don't put space or text between the tags unless you want
+        default text to appear inside.
+      -->
+
+      <div class="note">
+        <strong>Input vs Textarea:</strong>
+        <br><code>&lt;input type="text"&gt;</code> = single line (name, email, search)
+        <br><code>&lt;textarea&gt;</code> = multiple lines (comments, descriptions, messages)
+      </div>
+    </form>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- CHECKBOXES AND RADIO BUTTONS                                    -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Checkboxes and Radio Buttons</h3>
+
+    <form>
+      <!--
+        CHECKBOXES: type="checkbox"
+        ===========================
+        Checkboxes let users select MULTIPLE options.
+        Think: "Pick all that apply."
+
+        Each checkbox is independent -- checking one doesn't uncheck others.
+      -->
+
+      <p><strong>What programming languages do you know? (check all that apply)</strong></p>
+
+      <div style="margin-left: 20px;">
+        <input type="checkbox" id="lang-js" name="languages" value="javascript">
+        <label for="lang-js" style="display: inline; font-weight: normal;">JavaScript</label>
+        <!--
+          type="checkbox" = creates a checkbox
+          id="lang-js" = unique identifier for this checkbox
+          name="languages" = the field name (grouped together)
+          value="javascript" = the value sent to the server if checked
+
+          Notice the label is AFTER the input, and display: inline
+          makes it appear on the same line as the checkbox.
+        -->
+        <br>
+
+        <input type="checkbox" id="lang-py" name="languages" value="python">
+        <label for="lang-py" style="display: inline; font-weight: normal;">Python</label>
+        <br>
+
+        <input type="checkbox" id="lang-java" name="languages" value="java">
+        <label for="lang-java" style="display: inline; font-weight: normal;">Java</label>
+        <br>
+
+        <input type="checkbox" id="lang-ts" name="languages" value="typescript" checked>
+        <label for="lang-ts" style="display: inline; font-weight: normal;">TypeScript (pre-checked!)</label>
+        <!--
+          The "checked" attribute makes this checkbox pre-selected when the page loads.
+          Notice "checked" has no value -- just adding the word is enough.
+        -->
+      </div>
+
+      <hr style="margin: 20px 0;">
+
+      <!--
+        RADIO BUTTONS: type="radio"
+        ============================
+        Radio buttons let users select ONLY ONE option from a group.
+        Think: "Pick one."
+
+        CRITICAL: Radio buttons with the SAME "name" attribute are grouped together.
+        Selecting one will automatically DESELECT the others in the same group.
+      -->
+
+      <p><strong>What is your experience level? (pick one)</strong></p>
+
+      <div style="margin-left: 20px;">
+        <input type="radio" id="level-beginner" name="experience" value="beginner">
+        <label for="level-beginner" style="display: inline; font-weight: normal;">Beginner</label>
+        <!--
+          type="radio" = creates a radio button (circle instead of square)
+          name="experience" = ALL radio buttons with this same name are in ONE group
+          value="beginner" = what gets sent to the server if this one is selected
+        -->
+        <br>
+
+        <input type="radio" id="level-intermediate" name="experience" value="intermediate">
+        <label for="level-intermediate" style="display: inline; font-weight: normal;">Intermediate</label>
+        <br>
+
+        <input type="radio" id="level-advanced" name="experience" value="advanced">
+        <label for="level-advanced" style="display: inline; font-weight: normal;">Advanced</label>
+      </div>
+
+      <div class="critical">
+        <strong>Checkbox vs Radio -- THE KEY DIFFERENCE:</strong>
+        <br><code>Checkbox</code> = pick MANY (square boxes). Each is independent.
+        <br><code>Radio</code> = pick ONE (circles). They share the same <code>name</code> attribute.
+        <br><br>
+        This WILL come up in interviews. Remember: checkbox = many, radio = one.
+      </div>
+    </form>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- SELECT / DROPDOWN                                               -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Dropdown Menus (Select)</h3>
+
+    <form>
+      <label for="country">Choose your country:</label>
+      <select id="country" name="country">
+        <!--
+          THE <select> TAG - DROPDOWN MENU
+          =================================
+          Creates a dropdown list where the user picks ONE option.
+          Each option is defined by an <option> tag inside.
+
+          Think of <select> as the box, and <option> as each item in the list.
+        -->
+
+        <option value="">-- Please choose --</option>
+        <!--
+          This first option has an empty value.
+          It acts as a placeholder/prompt.
+          The user sees "-- Please choose --" but it sends nothing.
+        -->
+
+        <option value="us">United States</option>
+        <!--
+          value="us" = what gets sent to the server
+          "United States" = what the user SEES in the dropdown
+
+          The user sees friendly text, the server gets a code.
+        -->
+
+        <option value="uk">United Kingdom</option>
+        <option value="in">India</option>
+        <option value="ca">Canada</option>
+        <option value="au" selected>Australia (pre-selected)</option>
+        <!--
+          "selected" makes this the default choice when the page loads.
+          Like "checked" for checkboxes, just adding the word is enough.
+        -->
+      </select>
+
+      <div class="note" style="margin-top: 15px;">
+        <strong>When to use what:</strong>
+        <br>2-5 options? Use <strong>radio buttons</strong> (user sees all options at once)
+        <br>5+ options? Use a <strong>dropdown</strong> (saves space on the page)
+      </div>
+    </form>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- BUTTONS                                                         -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Buttons: &lt;button&gt; vs &lt;input type="submit"&gt;</h3>
+
+    <form>
+      <!--
+        There are TWO ways to create a submit button in HTML.
+        Both work, but <button> is more flexible and modern.
+      -->
+
+      <p><strong>Option 1: The &lt;button&gt; tag (PREFERRED)</strong></p>
+      <button type="submit">Submit Form</button>
+      <!--
+        THE <button> TAG
+        ================
+        A clickable button. The text between the tags is what shows on the button.
+
+        type="submit" = clicking this will submit the form
+        type="button" = a regular button that does nothing by default
+                        (you'd add behavior with JavaScript/TypeScript)
+        type="reset"  = clears all form fields back to their defaults
+
+        <button> is PREFERRED because:
+        - You can put HTML inside it (icons, images, styled text)
+        - It's more flexible than <input type="submit">
+      -->
+
+      <p style="margin-top: 20px;"><strong>Option 2: The &lt;input type="submit"&gt; tag (older style)</strong></p>
+      <input type="submit" value="Submit Form">
+      <!--
+        <input type="submit">
+        ======================
+        An older way to make a submit button.
+        The "value" attribute sets the button text.
+
+        It works fine but is less flexible than <button>
+        because you can't put other HTML inside it.
+      -->
+
+      <p style="margin-top: 20px;"><strong>Other button types:</strong></p>
+      <button type="button" style="background-color: #ff9800;">Regular Button (does nothing without JS)</button>
+      <!-- type="button" = doesn't submit the form. Needs JavaScript to do anything. -->
+
+      <button type="reset" style="background-color: #f44336;">Reset Form (clears all fields)</button>
+      <!-- type="reset" = clears all fields back to their default values. Try it! -->
+
+      <div class="critical">
+        <strong>IMPORTANT for Angular:</strong>
+        In Angular, you'll almost always use <code>&lt;button type="button"&gt;</code>
+        or <code>&lt;button type="submit"&gt;</code> and handle the action in TypeScript.
+        You'll rarely use <code>&lt;input type="submit"&gt;</code>.
+      </div>
+    </form>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- COMPLETE FORM EXAMPLE                                           -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Complete Example: A Sign-Up Form</h3>
+    <p>Here's everything combined into a realistic sign-up form.
+    Try filling it out and clicking Submit!</p>
+
+    <form style="max-width: 500px;">
+      <!--
+        This form doesn't actually go anywhere (no action attribute).
+        When you click Submit, the page will just refresh.
+        In a real app (or Angular app), this would send data to a server.
+      -->
+
+      <label for="signup-name">Full Name: *</label>
+      <input type="text" id="signup-name" name="fullname" placeholder="John Doe" required>
+      <!--
+        "required" = the browser won't let you submit if this field is empty.
+        Try clicking Submit without filling this in!
+        The * in the label is a visual hint that this field is required.
+      -->
+
+      <label for="signup-email">Email: *</label>
+      <input type="email" id="signup-email" name="email" placeholder="john@example.com" required>
+
+      <label for="signup-password">Password: *</label>
+      <input type="password" id="signup-password" name="password"
+             placeholder="At least 8 characters" required minlength="8">
+      <!--
+        minlength="8" = the browser requires at least 8 characters.
+        Try submitting with a short password!
+      -->
+
+      <label for="signup-age">Age:</label>
+      <input type="number" id="signup-age" name="age" min="13" max="120">
+
+      <label for="signup-country">Country:</label>
+      <select id="signup-country" name="country">
+        <option value="">-- Select --</option>
+        <option value="us">United States</option>
+        <option value="uk">United Kingdom</option>
+        <option value="in">India</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="signup-bio">Bio:</label>
+      <textarea id="signup-bio" name="bio" rows="3" placeholder="Tell us about yourself..."></textarea>
+
+      <div style="margin-top: 15px;">
+        <input type="checkbox" id="signup-terms" name="terms" required>
+        <label for="signup-terms" style="display: inline; font-weight: normal;">
+          I agree to the Terms of Service *
+        </label>
+      </div>
+
+      <button type="submit" style="margin-top: 15px; width: 100%;">Create Account</button>
+    </form>
+
+    <div class="note" style="margin-top: 15px;">
+      <strong>Try these experiments:</strong>
+      <br>1. Click "Create Account" without filling anything in -- see the validation!
+      <br>2. Type an invalid email and try to submit
+      <br>3. Type a password shorter than 8 characters
+      <br>4. The browser has BUILT-IN validation. In Angular, you'll add even more.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- QUICK REFERENCE                                                 -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Quick Reference: All Input Types</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+      <tr style="background-color: #e3f2fd;">
+        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #2196F3;">Input Type</th>
+        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #2196F3;">What It Creates</th>
+        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #2196F3;">Example Use</th>
+      </tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>text</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Regular text box</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Name, search query</td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>email</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Email text box</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Email field</td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>password</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Hidden text box</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Password field</td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>number</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Number-only box</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Age, quantity</td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>checkbox</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Square check box</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Agree to terms, pick many</td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>radio</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Circle selector</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Pick one from a group</td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>submit</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Submit button</td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Send the form</td></tr>
+      <tr><td style="padding: 8px;"><code>date</code></td><td style="padding: 8px;">Date picker</td><td style="padding: 8px;">Birthday, event date</td></tr>
+    </table>
+  </div>
+
+  <hr>
+
+  <div style="text-align: center; padding: 20px;">
+    <h2>You finished Lesson 2!</h2>
+    <p>You now know how to build forms. Next up: CSS!</p>
+    <p>
+      <a href="01-basic-html.html" style="font-size: 18px; color: #999; margin-right: 20px;">&larr; Previous: Basic HTML</a>
+      <a href="03-css-basics.html" style="font-size: 20px; color: #2196F3;">Next: CSS Basics &rarr;</a>
+    </p>
+  </div>
+
+</body>
+</html>

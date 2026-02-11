@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================================
+  EXERCISE: Build a Profile Card Page
+  ==========================================================================
+
+  INSTRUCTIONS:
+  =============
+  Your task is to STYLE this page using CSS. The HTML structure is already
+  provided. You just need to add CSS rules inside the <style> tag.
+
+  WHAT YOU'RE BUILDING:
+    A profile card page with:
+    1. A page background color
+    2. A centered card with a shadow
+    3. A circular profile image placeholder
+    4. A name, job title, and bio
+    5. Skill tags
+    6. Social media links styled as buttons
+    7. It should look decent on both desktop and phone
+
+  HOW TO DO THIS EXERCISE:
+    1. Open this file in your browser -- you'll see unstyled (ugly) content
+    2. Open this file in VS Code (or any text editor)
+    3. Look at the <style> section below -- there are TODO comments
+    4. Replace each TODO with the correct CSS property and value
+    5. Save the file and refresh your browser to see changes
+    6. Compare with the EXPECTED RESULT described below
+
+  EXPECTED RESULT:
+    - Page has a light gray background (#f0f2f5)
+    - Card is centered on the page, white background, rounded corners, shadow
+    - Profile "image" is a colored circle, centered
+    - Name is large and dark
+    - Job title is smaller and gray
+    - Bio text is regular sized, gray
+    - Skill tags are small colored pills/badges
+    - Social links look like buttons in a row
+    - On phone-sized screens, it still looks good
+
+  HINTS:
+    - Use display: flex; justify-content: center; align-items: center; to center the card
+    - Use border-radius: 50% to make a circle
+    - Use box-shadow for the card shadow
+    - Use gap for spacing between flex items
+    - Refer to the previous lesson files if you get stuck!
+
+  DIFFICULTY: Beginner
+  ESTIMATED TIME: 15-30 minutes
+  ==========================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercise: Profile Card</title>
+
+  <style>
+    /* ================================================================ */
+    /* RESET - This is done for you. Don't change it.                  */
+    /* ================================================================ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    /* ================================================================ */
+    /* TODO 1: Style the body                                          */
+    /*                                                                  */
+    /* Make the page a flex container that centers the card.            */
+    /* Set a background color and minimum height.                      */
+    /*                                                                  */
+    /* Properties you need:                                            */
+    /*   - font-family: set to Arial, sans-serif                       */
+    /*   - background-color: set to #f0f2f5 (light gray)              */
+    /*   - min-height: set to 100vh (vh = viewport height = full screen) */
+    /*   - display: flex                                               */
+    /*   - justify-content: center (center horizontally)               */
+    /*   - align-items: center (center vertically)                     */
+    /*   - padding: 20px                                               */
+    /* ================================================================ */
+    body {
+      /* YOUR CSS HERE -- replace these comments with real properties */
+      /* Example: font-family: Arial, sans-serif; */
+    }
+
+
+    /* ================================================================ */
+    /* TODO 2: Style the profile card                                  */
+    /*                                                                  */
+    /* Make it look like a floating card with rounded corners.         */
+    /*                                                                  */
+    /* Properties you need:                                            */
+    /*   - background-color: white (#ffffff or just white)             */
+    /*   - border-radius: 15px (rounded corners)                       */
+    /*   - box-shadow: 0 10px 40px rgba(0,0,0,0.1) (soft shadow)     */
+    /*   - padding: 40px                                               */
+    /*   - width: 380px                                                */
+    /*   - max-width: 100% (so it doesn't overflow on phones)          */
+    /*   - text-align: center                                          */
+    /* ================================================================ */
+    .profile-card {
+      /* YOUR CSS HERE */
+    }
+
+
+    /* ================================================================ */
+    /* TODO 3: Style the profile image circle                          */
+    /*                                                                  */
+    /* Make it a colored circle with centered text inside.             */
+    /*                                                                  */
+    /* Properties you need:                                            */
+    /*   - width: 100px                                                */
+    /*   - height: 100px                                               */
+    /*   - border-radius: 50% (this makes it a perfect circle!)       */
+    /*   - background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) */
+    /*   - color: white                                                */
+    /*   - font-size: 36px                                             */
+    /*   - font-weight: bold                                           */
+    /*   - display: flex (to center the text inside)                   */
+    /*   - align-items: center                                         */
+    /*   - justify-content: center                                     */
+    /*   - margin: 0 auto 20px (center the circle, 20px below it)     */
+    /* ================================================================ */
+    .profile-image {
+      /* YOUR CSS HERE */
+    }
+
+
+    /* ================================================================ */
+    /* TODO 4: Style the name                                          */
+    /*                                                                  */
+    /* Properties you need:                                            */
+    /*   - font-size: 24px                                             */
+    /*   - font-weight: bold                                           */
+    /*   - color: #1a1a2e (very dark blue-black)                       */
+    /*   - margin-bottom: 5px                                          */
+    /* ================================================================ */
+    .profile-name {
+      /* YOUR CSS HERE */
+    }
+
+
+    /* ================================================================ */
+    /* TODO 5: Style the job title                                     */
+    /*                                                                  */
+    /* Properties you need:                                            */
+    /*   - font-size: 16px                                             */
+    /*   - color: #888 (gray)                                          */
+    /*   - margin-bottom: 20px                                         */
+    /* ================================================================ */
+    .profile-title {
+      /* YOUR CSS HERE */
+    }
+
+
+    /* ================================================================ */
+    /* TODO 6: Style the bio text                                      */
+    /*                                                                  */
+    /* Properties you need:                                            */
+    /*   - font-size: 14px                                             */
+    /*   - color: #666 (medium gray)                                   */
+    /*   - line-height: 1.6                                            */
+    /*   - margin-bottom: 25px                                         */
+    /* ================================================================ */
+    .profile-bio {
+      /* YOUR CSS HERE */
+    }
+
+
+    /* ================================================================ */
+    /* TODO 7: Style the skills container                              */
+    /*                                                                  */
+    /* Make it a flex container that wraps and centers the skill tags.  */
+    /*                                                                  */
+    /* Properties you need:                                            */
+    /*   - display: flex                                               */
+    /*   - flex-wrap: wrap (so tags wrap to the next line if needed)   */
+    /*   - justify-content: center                                     */
+    /*   - gap: 8px (space between tags)                               */
+    /*   - margin-bottom: 25px                                         */
+    /* ================================================================ */
+    .skills {
+      /* YOUR CSS HERE */
+    }
+
+
+    /* ================================================================ */
+    /* TODO 8: Style each individual skill tag                         */
+    /*                                                                  */
+    /* Make them look like small colored pills/badges.                 */
+    /*                                                                  */
+    /* Properties you need:                                            */
+    /*   - background-color: #e8eaf6 (light purple/blue)              */
+    /*   - color: #3f51b5 (darker purple/blue for the text)           */
+    /*   - padding: 5px 15px                                           */
+    /*   - border-radius: 20px (very rounded = pill shape)            */
+    /*   - font-size: 13px                                             */
+    /*   - font-weight: bold                                           */
+    /* ================================================================ */
+    .skill-tag {
+      /* YOUR CSS HERE */
+    }
+
+
+    /* ================================================================ */
+    /* TODO 9: Style the social links container                        */
+    /*                                                                  */
+    /* Make it a flex container with centered buttons.                 */
+    /*                                                                  */
+    /* Properties you need:                                            */
+    /*   - display: flex                                               */
+    /*   - justify-content: center                                     */
+    /*   - gap: 10px                                                   */
+    /* ================================================================ */
+    .social-links {
+      /* YOUR CSS HERE */
+    }
+
+
+    /* ================================================================ */
+    /* TODO 10: Style each social link button                          */
+    /*                                                                  */
+    /* Make them look like buttons.                                    */
+    /*                                                                  */
+    /* Properties you need:                                            */
+    /*   - text-decoration: none (removes the underline from links)   */
+    /*   - background-color: #3f51b5 (purple/blue)                    */
+    /*   - color: white                                                */
+    /*   - padding: 10px 20px                                          */
+    /*   - border-radius: 8px                                          */
+    /*   - font-size: 14px                                             */
+    /*   - font-weight: bold                                           */
+    /*                                                                  */
+    /* BONUS: Add a hover effect!                                      */
+    /*   .social-link:hover {                                          */
+    /*     background-color: #303f9f;                                   */
+    /*   }                                                              */
+    /* ================================================================ */
+    .social-link {
+      /* YOUR CSS HERE */
+    }
+
+
+    /* ================================================================ */
+    /* BONUS TODO 11: Add responsive styles                            */
+    /*                                                                  */
+    /* On phones (max-width: 480px):                                   */
+    /*   - .profile-card: padding: 25px                                */
+    /*   - .profile-image: width: 80px, height: 80px, font-size: 28px */
+    /*   - .profile-name: font-size: 20px                              */
+    /*                                                                  */
+    /* Format:                                                          */
+    /*   @media (max-width: 480px) {                                   */
+    /*     .profile-card { padding: 25px; }                            */
+    /*     ... etc                                                      */
+    /*   }                                                              */
+    /* ================================================================ */
+    /* YOUR MEDIA QUERY HERE (optional bonus) */
+
+  </style>
+</head>
+<body>
+
+  <!--
+    THE HTML STRUCTURE BELOW IS COMPLETE.
+    DO NOT MODIFY THE HTML. Only add CSS above.
+  -->
+
+  <div class="profile-card">
+
+    <!-- Profile "image" (we use a div with initials since we have no real image) -->
+    <div class="profile-image">SD</div>
+
+    <!-- Name -->
+    <h1 class="profile-name">Sura Dev</h1>
+
+    <!-- Job title -->
+    <p class="profile-title">Junior Frontend Developer</p>
+
+    <!-- Bio -->
+    <p class="profile-bio">
+      Passionate about building modern web applications with Angular and TypeScript.
+      Currently learning and growing every day. Excited to contribute to a great team.
+    </p>
+
+    <!-- Skills -->
+    <div class="skills">
+      <span class="skill-tag">Angular</span>
+      <span class="skill-tag">TypeScript</span>
+      <span class="skill-tag">HTML/CSS</span>
+      <span class="skill-tag">JavaScript</span>
+      <span class="skill-tag">Git</span>
+    </div>
+
+    <!-- Social links -->
+    <div class="social-links">
+      <a href="#" class="social-link">GitHub</a>
+      <a href="#" class="social-link">LinkedIn</a>
+      <a href="#" class="social-link">Portfolio</a>
+    </div>
+
+  </div>
+
+</body>
+</html>
+
+<!--
+  ==========================================================================
+  ANSWER KEY (Don't look until you've tried!)
+  ==========================================================================
+
+  Scroll down for the answer...
+
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+  |
+
+  ANSWER KEY - Here's the complete CSS for each TODO:
+
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .profile-card {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    padding: 40px;
+    width: 380px;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 36px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+
+  .profile-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a1a2e;
+    margin-bottom: 5px;
+  }
+
+  .profile-title {
+    font-size: 16px;
+    color: #888;
+    margin-bottom: 20px;
+  }
+
+  .profile-bio {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 25px;
+  }
+
+  .skills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 25px;
+  }
+
+  .skill-tag {
+    background-color: #e8eaf6;
+    color: #3f51b5;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .social-link {
+    text-decoration: none;
+    background-color: #3f51b5;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .social-link:hover {
+    background-color: #303f9f;
+  }
+
+  @media (max-width: 480px) {
+    .profile-card { padding: 25px; }
+    .profile-image { width: 80px; height: 80px; font-size: 28px; }
+    .profile-name { font-size: 20px; }
+  }
+
+  ==========================================================================
+-->

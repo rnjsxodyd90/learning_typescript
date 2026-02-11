@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================================
+  FILE: 03-css-basics.html
+  WHAT YOU'LL LEARN: How CSS works -- selectors, colors, fonts, spacing.
+
+  CSS = Cascading Style Sheets
+  It makes your HTML look good. Without CSS, everything is plain black
+  text on a white background. With CSS, you get colors, layouts, spacing, etc.
+
+  Three ways to add CSS:
+    1. INLINE: style="..." directly on an HTML tag (quick but messy)
+    2. INTERNAL: <style> tag inside <head> (good for single-page examples)
+    3. EXTERNAL: separate .css file linked with <link> tag (best for real projects)
+
+  In this tutorial, we use INTERNAL CSS (style tag) so everything is in one file.
+  In Angular, each component has its own external CSS file -- but the syntax is the same.
+  ==========================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03 - CSS Basics</title>
+
+  <style>
+    /*
+      ================================================================
+      CSS LIVES HERE! (between <style> tags)
+
+      CSS SYNTAX:
+
+        selector {
+          property: value;
+          property: value;
+        }
+
+      That's the entire format. Let's break it down:
+
+        selector  = WHAT you want to style (which HTML element)
+        property  = WHAT aspect you want to change (color, size, etc.)
+        value     = what you want to change it TO (red, 20px, etc.)
+
+      Example:
+        p {
+          color: blue;
+        }
+
+      This says: "Find all <p> tags and make their text blue."
+      ================================================================
+    */
+
+
+    /* ============================================================ */
+    /* BASIC PAGE STYLING                                           */
+    /* ============================================================ */
+
+    body {
+      /*
+        ELEMENT SELECTOR: "body"
+        ========================
+        This targets the <body> tag. Since ALL visible content is inside
+        <body>, these styles affect the entire page.
+
+        Think of it as: "Style the whole page."
+      */
+      font-family: Arial, sans-serif;
+      /*
+        font-family = what font to use for text
+        "Arial" is the first choice. If the user's computer doesn't have Arial,
+        it falls back to any "sans-serif" font (fonts without the little feet/tails).
+      */
+
+      max-width: 850px;
+      /* max-width = the page content won't be wider than 850 pixels */
+
+      margin: 0 auto;
+      /*
+        margin: 0 auto;
+        This is a shorthand. It means:
+          top and bottom margin = 0 (no extra space above/below)
+          left and right margin = auto (split remaining space equally)
+
+        "auto" on left/right margins CENTERS the content on the page!
+        This is a classic trick for centering a block of content.
+      */
+
+      padding: 20px;
+      /* padding = space INSIDE the body, between the edge and the content */
+
+      line-height: 1.6;
+      /* line-height = space between lines of text. 1.6 = 160% of font size. Makes text easier to read. */
+
+      color: #333;
+      /*
+        color = TEXT color (not background)
+        #333 is a dark gray in hex color code (explained below)
+      */
+
+      background-color: #f5f5f5;
+      /* background-color = the color behind the text */
+    }
+
+
+    /* ============================================================ */
+    /* SELECTOR TYPES                                               */
+    /* ============================================================ */
+
+    /*
+      CSS SELECTOR TYPE 1: ELEMENT SELECTOR
+      ======================================
+      Targets ALL elements of that tag type.
+
+      Format: tagname { ... }
+      Example: p { color: blue; } -- makes ALL paragraphs blue
+
+      Use when: you want to style ALL paragraphs, ALL headings, etc.
+    */
+
+    h1 {
+      color: #9C27B0;
+      /* This styles ALL <h1> tags on the page. Purple text. */
+
+      border-bottom: 3px solid #9C27B0;
+      /* A purple line under the heading */
+
+      padding-bottom: 10px;
+      /* Some space between the text and the line */
+    }
+
+
+    /*
+      CSS SELECTOR TYPE 2: CLASS SELECTOR
+      ====================================
+      Targets elements that have a specific class="..." attribute.
+      Uses a DOT (.) before the class name.
+
+      Format: .classname { ... }
+      Example: .highlight { background: yellow; }
+
+      Use when: you want to style SOME elements, not all.
+      You can reuse the same class on MANY elements.
+
+      CLASSES ARE THE MOST COMMONLY USED SELECTOR.
+      In Angular, you'll use classes constantly.
+    */
+
+    .highlight {
+      background-color: #FFF9C4;
+      /* Light yellow background */
+      padding: 3px 8px;
+      border-radius: 3px;
+    }
+    /* Any element with class="highlight" gets a yellow background */
+
+    .success-text {
+      color: #4CAF50;
+      font-weight: bold;
+    }
+    /* Any element with class="success-text" gets green bold text */
+
+    .error-text {
+      color: #f44336;
+      font-weight: bold;
+    }
+    /* Any element with class="error-text" gets red bold text */
+
+
+    /*
+      CSS SELECTOR TYPE 3: ID SELECTOR
+      =================================
+      Targets ONE specific element with a specific id="..." attribute.
+      Uses a HASH (#) before the id name.
+
+      Format: #idname { ... }
+      Example: #main-title { font-size: 40px; }
+
+      Use when: you want to style ONE SPECIFIC element.
+      Each id should only be used ONCE on a page.
+
+      IMPORTANT: In practice, PREFER CLASSES over IDs for styling.
+      IDs are more for JavaScript targeting and form labels.
+    */
+
+    #special-paragraph {
+      background-color: #E8EAF6;
+      border-left: 5px solid #3F51B5;
+      padding: 15px;
+      font-style: italic;
+    }
+    /* Only the ONE element with id="special-paragraph" gets this style */
+
+
+    /* ============================================================ */
+    /* THE BOX MODEL                                                */
+    /* ============================================================ */
+
+    /*
+      THE CSS BOX MODEL - THIS IS CRITICAL!
+      ======================================
+      Every HTML element is a BOX. Even text. Even images. Everything.
+
+      Each box has 4 layers (from inside to outside):
+
+        1. CONTENT  = The actual text or image (this is YOU)
+        2. PADDING  = Space between content and border (this is YOUR JACKET)
+        3. BORDER   = The line around the element (this is a FENCE)
+        4. MARGIN   = Space outside the border (this is YOUR YARD)
+
+      REAL WORLD ANALOGY:
+        Imagine you're standing in your yard:
+        - YOU are the content
+        - Your JACKET is padding (space between you and the fence)
+        - The FENCE around your property is the border
+        - The YARD/SIDEWALK between your fence and your neighbor's is the margin
+
+      Understanding this is critical for layout in CSS and Angular.
+    */
+
+    .box-model-demo {
+      /* CONTENT: the text inside */
+      width: 300px;        /* How wide the content area is */
+
+      /* PADDING: space between content and border (your jacket) */
+      padding: 20px;       /* 20px of space on ALL sides */
+
+      /* BORDER: the fence around the element */
+      border: 3px solid #333;  /* 3px thick, solid line, dark gray */
+
+      /* MARGIN: space outside the border (the yard) */
+      margin: 30px auto;   /* 30px top/bottom, auto (centered) left/right */
+
+      background-color: #fff;
+      text-align: center;
+    }
+
+    .box-padding-demo {
+      background-color: #E8F5E9;
+      border: 2px solid #4CAF50;
+      margin: 10px;
+    }
+
+
+    /* ============================================================ */
+    /* COLOR EXAMPLES                                               */
+    /* ============================================================ */
+
+    /*
+      COLORS IN CSS
+      ==============
+      There are many ways to specify colors:
+
+      1. BY NAME:     color: red;           (simple, limited options)
+      2. HEX CODE:    color: #FF0000;       (most common, 6 characters after #)
+      3. RGB:         color: rgb(255,0,0);  (red, green, blue values 0-255)
+      4. RGBA:        color: rgba(255,0,0,0.5); (same as RGB + transparency)
+
+      HEX CODES explained:
+        #FF0000 = pure red    (FF=full red, 00=no green, 00=no blue)
+        #00FF00 = pure green  (00=no red, FF=full green, 00=no blue)
+        #0000FF = pure blue   (00=no red, 00=no green, FF=full blue)
+        #000000 = black       (no color at all)
+        #FFFFFF = white       (all colors at maximum)
+        #333333 = dark gray   (can be shortened to #333)
+
+      You don't need to memorize hex codes. Google "color picker" and
+      it will give you the hex code for any color you want.
+    */
+
+    .color-box {
+      display: inline-block;
+      width: 100px;
+      height: 60px;
+      margin: 5px;
+      border-radius: 5px;
+      text-align: center;
+      line-height: 60px;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+
+    /* ============================================================ */
+    /* FONT PROPERTIES                                              */
+    /* ============================================================ */
+
+    .font-small {
+      font-size: 12px;    /* Small text */
+    }
+
+    .font-medium {
+      font-size: 18px;    /* Medium text */
+    }
+
+    .font-large {
+      font-size: 28px;    /* Large text */
+    }
+
+    .font-serif {
+      font-family: Georgia, "Times New Roman", serif;
+      /* Serif fonts have little "feet" on the letters. Like in books. */
+    }
+
+    .font-sans {
+      font-family: Arial, Helvetica, sans-serif;
+      /* Sans-serif means "without feet." Clean, modern look. */
+    }
+
+    .font-mono {
+      font-family: "Courier New", Courier, monospace;
+      /* Monospace = every letter is the same width. Used for code. */
+    }
+
+    .font-bold { font-weight: bold; }        /* Bold text */
+    .font-light { font-weight: 300; }        /* Light/thin text */
+    .font-italic { font-style: italic; }      /* Italic text */
+    .font-uppercase { text-transform: uppercase; }  /* ALL CAPS */
+    .font-underline { text-decoration: underline; }  /* Underlined */
+
+
+    /* ============================================================ */
+    /* PRACTICAL EXAMPLES                                           */
+    /* ============================================================ */
+
+    .example-section {
+      background-color: #fff;
+      border: 2px solid #9C27B0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .example-section h3 {
+      /*
+        DESCENDANT SELECTOR
+        ====================
+        ".example-section h3" means: "find <h3> tags that are INSIDE .example-section"
+        This is a combination selector -- it's more specific.
+
+        It won't style h3 tags outside of .example-section.
+      */
+      color: #9C27B0;
+      margin-top: 0;
+    }
+
+    .note {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 10px 15px;
+      margin: 15px 0;
+    }
+
+    code {
+      background-color: #e8e8e8;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+
+    hr {
+      border: none;
+      border-top: 2px solid #ddd;
+      margin: 30px 0;
+    }
+
+    /* A styled card to show what CSS can do */
+    .styled-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 400px;
+      margin: 20px auto;
+    }
+
+    .styled-card h3 {
+      color: white;
+      font-size: 24px;
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Lesson 3: CSS Basics</h1>
+  <p>CSS makes HTML look good. Let's learn how it works.</p>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- SELECTORS                                                       -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>CSS Selectors: How to TARGET Elements</h3>
+
+    <p>A selector tells CSS WHICH elements to style. There are 3 main types:</p>
+
+    <h4>1. Element Selector (targets ALL of that tag type)</h4>
+    <p>This <code>&lt;h1&gt;</code> at the top is purple because of: <code>h1 { color: #9C27B0; }</code></p>
+    <p>Every single &lt;h1&gt; on this page will be purple. You can't make just ONE purple with an element selector.</p>
+
+    <h4>2. Class Selector (targets elements with a specific class -- MOST USED)</h4>
+    <p>This text has a <span class="highlight">highlighted class</span> applied to it.</p>
+    <p>This text is <span class="success-text">green and bold</span> because of the <code>.success-text</code> class.</p>
+    <p>This text is <span class="error-text">red and bold</span> because of the <code>.error-text</code> class.</p>
+    <!--
+      In the HTML: class="highlight"
+      In the CSS:  .highlight { ... }
+
+      Notice the DOT before the class name in CSS. That's how CSS knows it's a class.
+
+      You can apply the same class to AS MANY elements as you want.
+      You can also put MULTIPLE classes on one element: class="highlight success-text"
+    -->
+
+    <h4>3. ID Selector (targets ONE specific element)</h4>
+    <p id="special-paragraph">
+      This paragraph has id="special-paragraph" so it gets unique styling. There should
+      only be ONE element with this ID on the entire page.
+    </p>
+    <!--
+      In the HTML: id="special-paragraph"
+      In the CSS:  #special-paragraph { ... }
+
+      Notice the HASH (#) before the ID name in CSS. That's how CSS knows it's an ID.
+    -->
+
+    <div class="note">
+      <strong>Summary:</strong>
+      <br><code>p { }</code> = element selector, targets ALL &lt;p&gt; tags
+      <br><code>.classname { }</code> = class selector, targets elements with that class (DOT)
+      <br><code>#idname { }</code> = ID selector, targets ONE element with that ID (HASH)
+      <br><br>
+      <strong>In practice:</strong> Use CLASSES 90% of the time. They're the standard.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- COLORS                                                          -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>Colors</h3>
+
+    <p>There are many ways to write colors in CSS:</p>
+
+    <div>
+      <div class="color-box" style="background-color: red;">red</div>
+      <div class="color-box" style="background-color: #FF5722;">#FF5722</div>
+      <div class="color-box" style="background-color: rgb(33, 150, 243);">rgb()</div>
+      <div class="color-box" style="background-color: rgba(0, 0, 0, 0.5);">rgba()</div>
+      <div class="color-box" style="background-color: #4CAF50;">#4CAF50</div>
+      <div class="color-box" style="background-color: #9C27B0;">#9C27B0</div>
+    </div>
+
+    <div style="margin-top: 15px;">
+      <p style="color: red;">color: red; (text color by name)</p>
+      <p style="color: #2196F3;">color: #2196F3; (text color by hex code -- this is blue)</p>
+      <p style="background-color: #FFEB3B; padding: 5px;">background-color: #FFEB3B; (yellow background)</p>
+      <p style="color: rgba(0,0,0,0.3);">color: rgba(0,0,0,0.3); (30% opacity -- faded text)</p>
+    </div>
+
+    <div class="note">
+      <strong>Tip:</strong> Google "color picker" to find hex codes for any color.
+      You do NOT need to memorize hex codes. Nobody does!
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- FONTS                                                           -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>Font Properties</h3>
+
+    <h4>Font Size:</h4>
+    <p class="font-small">font-size: 12px; -- small text</p>
+    <p class="font-medium">font-size: 18px; -- medium text</p>
+    <p class="font-large">font-size: 28px; -- large text</p>
+
+    <h4>Font Family (the typeface):</h4>
+    <p class="font-serif" style="font-size: 18px;">font-family: Georgia, serif; -- Serif (has little feet on letters)</p>
+    <p class="font-sans" style="font-size: 18px;">font-family: Arial, sans-serif; -- Sans-serif (clean, no feet)</p>
+    <p class="font-mono" style="font-size: 18px;">font-family: "Courier New", monospace; -- Monospace (for code)</p>
+
+    <h4>Font Weight, Style, and Decoration:</h4>
+    <p class="font-bold">font-weight: bold; -- Bold text</p>
+    <p class="font-light" style="font-size: 18px;">font-weight: 300; -- Light/thin text</p>
+    <p class="font-italic">font-style: italic; -- Italic text</p>
+    <p class="font-uppercase">text-transform: uppercase; -- uppercase text</p>
+    <p class="font-underline">text-decoration: underline; -- Underlined text</p>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- THE BOX MODEL                                                   -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>The Box Model (VERY IMPORTANT)</h3>
+
+    <p>Every HTML element is a BOX with 4 layers. Think of it like this:</p>
+
+    <div style="text-align: center; margin: 20px 0;">
+      <!-- Visual representation of the box model -->
+      <div style="background-color: #FFCDD2; padding: 20px; display: inline-block; border-radius: 5px;">
+        <strong>MARGIN</strong> (the yard / empty space outside)
+        <div style="background-color: #333; padding: 8px; border-radius: 3px; margin-top: 10px;">
+          <strong style="color: white;">BORDER</strong> (the fence)
+          <div style="background-color: #C8E6C9; padding: 20px; margin-top: 8px; border-radius: 3px;">
+            <strong>PADDING</strong> (your jacket / cushioning)
+            <div style="background-color: #BBDEFB; padding: 20px; margin-top: 10px; border-radius: 3px;">
+              <strong>CONTENT</strong> (you! the text/image)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p>Here's a box with all 4 layers visible:</p>
+
+    <div class="box-model-demo">
+      <strong>I am the content!</strong>
+      <br>width: 300px
+      <br>padding: 20px (jacket)
+      <br>border: 3px solid (fence)
+      <br>margin: 30px auto (yard)
+    </div>
+
+    <h4>Padding examples (space INSIDE the border):</h4>
+    <div class="box-padding-demo" style="padding: 5px;">
+      padding: 5px; (very tight)
+    </div>
+    <div class="box-padding-demo" style="padding: 20px;">
+      padding: 20px; (comfortable)
+    </div>
+    <div class="box-padding-demo" style="padding: 40px;">
+      padding: 40px; (very spacious)
+    </div>
+
+    <h4>Margin examples (space OUTSIDE the border):</h4>
+    <div style="background-color: #eee; padding: 5px;">
+      <div style="background-color: #BBDEFB; padding: 10px; margin: 5px; border: 2px solid #2196F3;">
+        margin: 5px; (close to neighbors)
+      </div>
+      <div style="background-color: #BBDEFB; padding: 10px; margin: 30px; border: 2px solid #2196F3;">
+        margin: 30px; (far from neighbors)
+      </div>
+    </div>
+
+    <h4>Margin and Padding shorthand:</h4>
+    <div class="note">
+      <code>padding: 10px;</code> -- same on ALL sides (10px top, right, bottom, left)
+      <br><code>padding: 10px 20px;</code> -- 10px top/bottom, 20px left/right
+      <br><code>padding: 10px 20px 30px 40px;</code> -- top, right, bottom, left (clockwise!)
+      <br><code>padding-top: 10px;</code> -- only the top
+      <br><br>
+      Same rules apply for margin!
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- BORDERS                                                         -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>Borders</h3>
+
+    <p>The <code>border</code> property has 3 parts: <strong>width</strong>, <strong>style</strong>, and <strong>color</strong>.</p>
+
+    <div style="border: 1px solid black; padding: 10px; margin: 10px 0;">
+      border: 1px solid black; (thin, solid line)
+    </div>
+
+    <div style="border: 3px dashed #2196F3; padding: 10px; margin: 10px 0;">
+      border: 3px dashed #2196F3; (thicker, dashed, blue)
+    </div>
+
+    <div style="border: 5px dotted #f44336; padding: 10px; margin: 10px 0;">
+      border: 5px dotted #f44336; (thick, dotted, red)
+    </div>
+
+    <div style="border: 2px solid #4CAF50; border-radius: 10px; padding: 10px; margin: 10px 0;">
+      border-radius: 10px; (rounded corners!)
+    </div>
+
+    <div style="border: 2px solid #9C27B0; border-radius: 50%; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; margin: 10px auto; text-align: center;">
+      border-radius: 50%; (perfect circle!)
+    </div>
+
+    <div class="note">
+      <strong>border-radius</strong> rounds the corners. The bigger the number, the more rounded.
+      <code>50%</code> makes a perfect circle (if width and height are equal).
+      This is super commonly used for profile picture avatars!
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- WIDTH AND HEIGHT                                                -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>Width and Height</h3>
+
+    <div style="width: 200px; height: 80px; background-color: #BBDEFB; border: 2px solid #2196F3; padding: 10px; margin: 10px 0; display: flex; align-items: center; justify-content: center;">
+      width: 200px<br>height: 80px
+    </div>
+
+    <div style="width: 50%; height: 60px; background-color: #C8E6C9; border: 2px solid #4CAF50; padding: 10px; margin: 10px 0; display: flex; align-items: center; justify-content: center;">
+      width: 50% (half of parent)
+    </div>
+
+    <div style="width: 100%; height: 60px; background-color: #FFF9C4; border: 2px solid #FFC107; padding: 10px; margin: 10px 0; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">
+      width: 100% (full width of parent)
+    </div>
+
+    <div class="note">
+      <strong>px vs %:</strong>
+      <br><code>px</code> (pixels) = fixed size. 200px is always 200px.
+      <br><code>%</code> (percent) = relative to the parent element. 50% = half of the parent's width.
+      <br><br>
+      <strong>Pro tip:</strong> Add <code>box-sizing: border-box;</code> to make width/height INCLUDE
+      padding and border. Without it, padding and border are ADDED to the width, which causes
+      elements to be bigger than you expect. Most modern projects set this globally.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- PUTTING IT TOGETHER                                             -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>Putting It All Together: A Styled Card</h3>
+    <p>Here's what you can build with just the CSS you learned:</p>
+
+    <div class="styled-card">
+      <h3>John Doe</h3>
+      <p>Frontend Developer</p>
+      <p style="font-size: 14px; opacity: 0.8;">
+        Passionate about building beautiful user interfaces
+        with Angular and TypeScript.
+      </p>
+      <div style="margin-top: 15px;">
+        <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; margin: 3px; display: inline-block;">Angular</span>
+        <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; margin: 3px; display: inline-block;">TypeScript</span>
+        <span style="background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; margin: 3px; display: inline-block;">CSS</span>
+      </div>
+    </div>
+
+    <p style="text-align: center;">This card uses: colors, fonts, padding, margins, borders,
+    border-radius, box-shadow, and a gradient background. All stuff you just learned!</p>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- QUICK REFERENCE                                                 -->
+  <!-- ============================================================== -->
+
+  <div class="example-section">
+    <h3>Quick Reference: Most Used CSS Properties</h3>
+    <table style="width: 100%; border-collapse: collapse;">
+      <tr style="background-color: #f3e5f5;">
+        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #9C27B0;">Property</th>
+        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #9C27B0;">What It Does</th>
+        <th style="padding: 10px; text-align: left; border-bottom: 2px solid #9C27B0;">Example</th>
+      </tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>color</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Text color</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>color: #333;</code></td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>background-color</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Background color</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>background-color: #fff;</code></td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>font-size</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Text size</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>font-size: 16px;</code></td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>font-family</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Font type</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>font-family: Arial;</code></td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>font-weight</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Bold/thin</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>font-weight: bold;</code></td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>padding</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Inner space</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>padding: 10px;</code></td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>margin</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Outer space</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>margin: 10px;</code></td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>border</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Border line</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>border: 1px solid #ccc;</code></td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>border-radius</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Rounded corners</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>border-radius: 8px;</code></td></tr>
+      <tr><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>width</code></td><td style="padding: 8px; border-bottom: 1px solid #ddd;">Element width</td><td style="padding: 8px; border-bottom: 1px solid #ddd;"><code>width: 300px;</code></td></tr>
+      <tr><td style="padding: 8px;"><code>height</code></td><td style="padding: 8px;">Element height</td><td style="padding: 8px;"><code>height: 200px;</code></td></tr>
+    </table>
+  </div>
+
+  <hr>
+
+  <div style="text-align: center; padding: 20px;">
+    <h2>You finished Lesson 3!</h2>
+    <p>You now know CSS basics. Next up: Flexbox (the key to modern layouts)!</p>
+    <p>
+      <a href="02-forms.html" style="font-size: 18px; color: #999; margin-right: 20px;">&larr; Previous: Forms</a>
+      <a href="04-flexbox.html" style="font-size: 20px; color: #9C27B0;">Next: Flexbox Layout &rarr;</a>
+    </p>
+  </div>
+
+</body>
+</html>

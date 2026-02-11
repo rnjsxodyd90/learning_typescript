@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================================
+  FILE: 05-responsive.html
+  WHAT YOU'LL LEARN: How to make your page look good on ALL screen sizes.
+
+  WHAT IS "RESPONSIVE DESIGN"?
+    Responsive means your website ADAPTS to different screen sizes:
+    - Big desktop monitor (1920px wide)
+    - Laptop screen (1366px wide)
+    - Tablet (768px wide)
+    - Phone (375px wide)
+
+    The SAME HTML page rearranges itself to look good everywhere.
+    You don't make separate websites for phone and desktop.
+    You make ONE website that RESPONDS to the screen size.
+
+  HOW?
+    We use "media queries" -- CSS rules that ONLY apply when the screen
+    is a certain size. Like saying:
+    "If the screen is smaller than 768px, stack everything vertically."
+
+  HOW TO TEST:
+    1. Open this file in your browser
+    2. SLOWLY resize the browser window (drag the edge to make it narrower)
+    3. Watch the layout change as the window gets smaller!
+    4. OR press F12 to open Developer Tools, then click the phone/tablet icon
+       to simulate different device sizes
+  ==========================================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+    THIS LINE IS CRITICAL FOR MOBILE!
+    =================================
+    Without this, phones will try to show the full desktop site zoomed out.
+    This tells the phone: "The page width should match my screen width."
+
+    ALWAYS include this in every HTML page. No exceptions.
+  -->
+
+  <title>05 - Responsive Design</title>
+
+  <style>
+    /* ============================================================ */
+    /* BASE STYLES (apply to ALL screen sizes)                      */
+    /* ============================================================ */
+
+    /*
+      MOBILE-FIRST APPROACH
+      =====================
+      The best practice is to write your CSS for MOBILE first (small screens),
+      then ADD rules for larger screens using media queries.
+
+      Why? Most of the world browses on phones. Start with the simplest
+      layout and enhance it for bigger screens.
+
+      But for learning purposes, we'll start with desktop and adapt DOWN.
+      Both approaches are valid.
+    */
+
+    * {
+      box-sizing: border-box;
+      /*
+        box-sizing: border-box
+        ======================
+        This makes width and height INCLUDE padding and border.
+        Without it, a 300px wide box with 20px padding becomes 340px wide.
+        With border-box, it stays 300px. MUCH easier to work with.
+
+        The * selector means "apply to ALL elements on the page."
+        Most professional projects start with this.
+      */
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f5f5;
+    }
+
+    /* ============================================================ */
+    /* THE HEADER / NAVBAR                                          */
+    /* ============================================================ */
+
+    .navbar {
+      background-color: #1a237e;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+    }
+
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .navbar .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar .nav-links a {
+      color: #B0BEC5;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .navbar .nav-links a:hover {
+      color: white;
+      /*
+        :hover is a PSEUDO-CLASS.
+        It applies styles ONLY when the mouse is over the element.
+        Try hovering over the nav links to see the color change!
+      */
+    }
+
+    /* ============================================================ */
+    /* THE HERO SECTION (big banner at the top)                     */
+    /* ============================================================ */
+
+    .hero {
+      background: linear-gradient(135deg, #1a237e 0%, #4a148c 100%);
+      color: white;
+      text-align: center;
+      padding: 80px 30px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .hero p {
+      font-size: 20px;
+      opacity: 0.8;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ============================================================ */
+    /* THE CARD GRID                                                */
+    /* ============================================================ */
+
+    .section-title {
+      text-align: center;
+      padding: 40px 20px 20px;
+      font-size: 32px;
+      color: #1a237e;
+    }
+
+    .card-grid {
+      display: flex;
+      gap: 25px;
+      padding: 20px 30px 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      justify-content: center;
+      /*
+        flex-wrap: wrap is KEY for responsive design with Flexbox.
+        On wide screens, 3 cards fit in a row.
+        On narrow screens, they WRAP to new rows automatically.
+      */
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 30px;
+      flex: 1;
+      min-width: 250px;
+      max-width: 350px;
+      /*
+        flex: 1      = grow to fill available space equally
+        min-width    = don't shrink below 250px (forces wrapping on small screens)
+        max-width    = don't grow beyond 350px (keeps cards from being too wide)
+      */
+    }
+
+    .card h3 {
+      color: #1a237e;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 15px;
+    }
+
+    .card .card-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    /* ============================================================ */
+    /* TWO-COLUMN LAYOUT                                            */
+    /* ============================================================ */
+
+    .two-column {
+      display: flex;
+      gap: 30px;
+      padding: 40px 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+      align-items: center;
+    }
+
+    .two-column .text-side {
+      flex: 1;
+      /*
+        flex: 1 = take up equal space.
+        Both .text-side and .image-side have flex: 1,
+        so they each get 50% of the width.
+      */
+    }
+
+    .two-column .text-side h2 {
+      color: #1a237e;
+      margin-bottom: 15px;
+      font-size: 28px;
+    }
+
+    .two-column .text-side p {
+      color: #666;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .two-column .image-side {
+      flex: 1;
+      background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
+      height: 300px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #5c6bc0;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* ============================================================ */
+    /* THE FOOTER                                                   */
+    /* ============================================================ */
+
+    .footer {
+      background-color: #263238;
+      color: #B0BEC5;
+      padding: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 40px;
+    }
+
+    .footer a {
+      color: #B0BEC5;
+      text-decoration: none;
+      margin-left: 15px;
+    }
+
+    /* ============================================================ */
+    /* RESPONSIVE INDICATOR (shows current screen size)             */
+    /* ============================================================ */
+
+    .size-indicator {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      padding: 10px 18px;
+      border-radius: 25px;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /*
+      By default (on desktop), the indicator shows "DESKTOP"
+      with a blue background. Media queries below will change it.
+    */
+    .size-indicator {
+      background-color: #1a237e;
+    }
+    .size-indicator::after {
+      content: "DESKTOP (wide)";
+    }
+
+
+    /* ============================================================ */
+    /*                                                              */
+    /*  MEDIA QUERIES -- THIS IS THE KEY TO RESPONSIVE DESIGN!     */
+    /*                                                              */
+    /* ============================================================ */
+
+    /*
+      WHAT IS A MEDIA QUERY?
+      =======================
+      A media query is a CSS rule that ONLY applies when the screen
+      meets certain conditions (usually a width range).
+
+      FORMAT:
+        @media (max-width: 768px) {
+          / * These styles ONLY apply when screen is 768px or NARROWER * /
+        }
+
+      Think of it like:
+        "IF the screen is 768px or less, THEN use these styles."
+
+      COMMON BREAKPOINTS (standard sizes):
+        1200px = large desktops
+        992px  = regular desktops / laptops
+        768px  = tablets
+        576px  = phones
+
+      You can use any numbers, but these are the industry standards.
+    */
+
+
+    /* ============================================================ */
+    /* TABLET STYLES (screen width 768px or less)                   */
+    /* ============================================================ */
+
+    @media (max-width: 768px) {
+      /*
+        EVERYTHING inside this block ONLY applies when the browser
+        window is 768 pixels wide or less (typical tablet size).
+
+        On wider screens, these rules are COMPLETELY IGNORED.
+      */
+
+      .hero h1 {
+        font-size: 32px;
+        /* Smaller heading on tablet -- 32px instead of 48px */
+      }
+
+      .hero p {
+        font-size: 16px;
+        /* Slightly smaller text */
+      }
+
+      .hero {
+        padding: 50px 20px;
+        /* Less padding on smaller screens */
+      }
+
+      .two-column {
+        flex-direction: column;
+        /*
+          THIS IS THE KEY RESPONSIVE TRICK!
+          On desktop: flex-direction is row (side by side)
+          On tablet: change to column (stacked vertically)
+
+          The two-column layout becomes a single column!
+        */
+      }
+
+      .two-column .image-side {
+        height: 200px;
+        /* Shorter image area on tablet */
+      }
+
+      .footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+        /* Footer stacks vertically on tablet */
+      }
+
+      /* Update the indicator */
+      .size-indicator {
+        background-color: #ff9800;
+      }
+      .size-indicator::after {
+        content: "TABLET (medium)";
+      }
+    }
+
+
+    /* ============================================================ */
+    /* PHONE STYLES (screen width 576px or less)                    */
+    /* ============================================================ */
+
+    @media (max-width: 576px) {
+      /*
+        These rules ONLY apply when the screen is 576px or less (phone).
+        They ALSO get the tablet rules above (because 576 < 768).
+        CSS cascades -- so phone gets BOTH tablet AND phone rules.
+      */
+
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px 15px;
+        text-align: center;
+        /*
+          On phone, the navbar stacks:
+          - Logo on top
+          - Links below
+          Instead of side-by-side
+        */
+      }
+
+      .navbar .nav-links {
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+        /* Even smaller on phone */
+      }
+
+      .hero p {
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 40px 15px;
+      }
+
+      .section-title {
+        font-size: 24px;
+        padding: 30px 15px 15px;
+      }
+
+      .card-grid {
+        padding: 10px 15px 30px;
+        gap: 15px;
+      }
+
+      .card {
+        padding: 20px;
+        min-width: 100%;
+        /*
+          min-width: 100% forces each card to take the full width.
+          So instead of 3 cards in a row, we get 1 card per row.
+          This is the mobile-friendly stack layout.
+        */
+      }
+
+      .two-column {
+        padding: 20px 15px;
+      }
+
+      .two-column .text-side h2 {
+        font-size: 22px;
+      }
+
+      /* Update the indicator */
+      .size-indicator {
+        background-color: #f44336;
+      }
+      .size-indicator::after {
+        content: "PHONE (small)";
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- The colored badge in the bottom-right corner that shows current screen size -->
+  <div class="size-indicator"></div>
+
+  <!-- ============================================================== -->
+  <!-- NAVBAR                                                          -->
+  <!-- ============================================================== -->
+
+  <nav class="navbar">
+    <div class="logo">ResponsiveApp</div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Features</a>
+      <a href="#">Pricing</a>
+      <a href="#">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ============================================================== -->
+  <!-- HERO SECTION                                                    -->
+  <!-- ============================================================== -->
+
+  <section class="hero">
+    <h1>Resize Your Browser Window!</h1>
+    <p>Slowly drag the edge of your browser to make it narrower.
+    Watch the layout change! Check the badge in the bottom-right corner.</p>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- EXPLANATION SECTION                                             -->
+  <!-- ============================================================== -->
+
+  <div style="max-width: 800px; margin: 30px auto; padding: 0 20px;">
+    <div style="background: white; border-radius: 10px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+      <h3 style="color: #1a237e; margin-top: 0;">How Responsive Design Works</h3>
+      <p>This page uses <strong>media queries</strong> to change the layout at different screen widths:</p>
+
+      <div style="margin: 15px 0;">
+        <div style="display: flex; align-items: center; margin: 10px 0;">
+          <span style="background: #1a237e; color: white; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; min-width: 130px; text-align: center;">DESKTOP</span>
+          <span style="margin-left: 15px;">Above 768px -- cards in a row, 2-column layout</span>
+        </div>
+        <div style="display: flex; align-items: center; margin: 10px 0;">
+          <span style="background: #ff9800; color: white; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; min-width: 130px; text-align: center;">TABLET</span>
+          <span style="margin-left: 15px;">577px - 768px -- 2-column becomes stacked</span>
+        </div>
+        <div style="display: flex; align-items: center; margin: 10px 0;">
+          <span style="background: #f44336; color: white; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; min-width: 130px; text-align: center;">PHONE</span>
+          <span style="margin-left: 15px;">Below 576px -- everything stacks, navbar vertical</span>
+        </div>
+      </div>
+
+      <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin-top: 15px;">
+        <strong>How to test:</strong>
+        <br>1. DRAG the edge of your browser window to make it narrower/wider
+        <br>2. OR press <strong>F12</strong> to open Developer Tools, then click the
+        phone/tablet icon (top-left of the DevTools panel) to simulate devices
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- CARD GRID                                                       -->
+  <!-- ============================================================== -->
+
+  <h2 class="section-title">Our Services</h2>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon" style="background: linear-gradient(135deg, #f44336, #e91e63);">W</div>
+      <h3>Web Development</h3>
+      <p>Build modern, responsive web applications with Angular, React, or Vue. Clean code, great performance.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-icon" style="background: linear-gradient(135deg, #2196F3, #03a9f4);">M</div>
+      <h3>Mobile Apps</h3>
+      <p>Create cross-platform mobile applications that work on both iOS and Android devices.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-icon" style="background: linear-gradient(135deg, #4CAF50, #8BC34A);">D</div>
+      <h3>UI/UX Design</h3>
+      <p>Design beautiful, user-friendly interfaces that people love to use. Form meets function.</p>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- TWO-COLUMN LAYOUT                                               -->
+  <!-- ============================================================== -->
+
+  <div class="two-column">
+    <div class="text-side">
+      <h2>This Section Has Two Columns</h2>
+      <p>On a desktop, this text is on the left and the image placeholder is on the right.
+      They sit side by side.</p>
+      <p>On a tablet or phone, they STACK vertically -- text on top, image below.
+      This happens because the media query changes <code>flex-direction</code> from
+      <code>row</code> to <code>column</code>.</p>
+      <p><strong>Try resizing your browser to see it change!</strong></p>
+    </div>
+    <div class="image-side">
+      [Image Placeholder]
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MEDIA QUERY CHEAT SHEET                                         -->
+  <!-- ============================================================== -->
+
+  <div style="max-width: 800px; margin: 30px auto; padding: 0 20px;">
+    <div style="background: white; border-radius: 10px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08);">
+      <h3 style="color: #1a237e; margin-top: 0;">Media Query Cheat Sheet</h3>
+
+      <pre style="background: #263238; color: #fff; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 14px; line-height: 1.8;">
+<span style="color: #888;">/* Default styles go here (apply to all sizes) */</span>
+.my-element {
+  font-size: 16px;
+  display: flex;
+  flex-direction: row;   <span style="color: #888;">/* side by side on desktop */</span>
+}
+
+<span style="color: #888;">/* Tablet: 768px or narrower */</span>
+<span style="color: #80CBC4;">@media</span> (max-width: 768px) {
+  .my-element {
+    flex-direction: column;   <span style="color: #888;">/* stack on tablet */</span>
+    font-size: 14px;
+  }
+}
+
+<span style="color: #888;">/* Phone: 576px or narrower */</span>
+<span style="color: #80CBC4;">@media</span> (max-width: 576px) {
+  .my-element {
+    padding: 10px;   <span style="color: #888;">/* less padding on phone */</span>
+    font-size: 12px;
+  }
+}</pre>
+
+      <div style="margin-top: 15px;">
+        <p><strong>Common responsive patterns:</strong></p>
+        <ul style="padding-left: 20px; color: #666;">
+          <li>Change <code>flex-direction: row</code> to <code>column</code> (side-by-side becomes stacked)</li>
+          <li>Change <code>width: 33%</code> to <code>width: 100%</code> (3 columns becomes 1)</li>
+          <li>Reduce <code>font-size</code> and <code>padding</code> on smaller screens</li>
+          <li>Hide non-essential elements with <code>display: none</code></li>
+          <li>Replace horizontal nav with a hamburger menu</li>
+        </ul>
+      </div>
+
+      <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin-top: 15px;">
+        <strong>Interview Tip:</strong> If asked "How do you make a website responsive?"
+        answer: "I use a mobile-first approach with CSS media queries to adjust layout,
+        font sizes, and spacing at different breakpoints. I use Flexbox with flex-wrap
+        for fluid card layouts, and change flex-direction from row to column for
+        stacked mobile layouts."
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- FOOTER                                                          -->
+  <!-- ============================================================== -->
+
+  <footer class="footer">
+    <div>2026 ResponsiveApp. All rights reserved.</div>
+    <div>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+
+  <div style="text-align: center; padding: 30px; background: white;">
+    <h2 style="color: #1a237e;">You finished Lesson 5!</h2>
+    <p>You now understand responsive design. Time for a practice exercise!</p>
+    <p>
+      <a href="04-flexbox.html" style="font-size: 18px; color: #999; margin-right: 20px;">&larr; Previous: Flexbox</a>
+      <a href="06-exercise.html" style="font-size: 20px; color: #1a237e;">Next: Practice Exercise &rarr;</a>
+    </p>
+  </div>
+
+</body>
+</html>

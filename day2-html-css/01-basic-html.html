@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================================
+  FILE: 01-basic-html.html
+  WHAT YOU'LL LEARN: All the essential HTML tags you need to know.
+
+  HOW TO USE THIS FILE:
+    1. Double-click this file to open it in your browser
+    2. Read what you see on the page
+    3. Then come back here and read the code + comments
+    4. Try changing things, save, and refresh your browser!
+  ==========================================================================
+-->
+
+<!--
+  THE DOCTYPE DECLARATION
+  =======================
+  This line tells the browser: "Hey, this is an HTML5 document."
+  You don't need to understand it deeply. Just ALWAYS put it
+  as the very first line of every HTML file. Think of it as
+  saying "I speak English" before starting a conversation.
+-->
+<html lang="en">
+<!--
+  THE <html> TAG
+  ==============
+  This is the ROOT of your page. Everything else goes INSIDE this tag.
+  Think of it as the outer walls of a house -- everything is contained within.
+
+  lang="en" tells the browser the page is in English.
+  This helps screen readers (tools for blind users) read the page correctly.
+-->
+
+<head>
+  <!--
+    THE <head> SECTION
+    ==================
+    This section is INVISIBLE to the user. They won't see anything here
+    on the actual webpage. It contains "behind the scenes" information:
+    - The page title (shows in the browser tab)
+    - Character encoding (so letters display correctly)
+    - Links to CSS files (styling)
+    - Other metadata (info about the page)
+
+    Think of <head> as the backstage of a theater -- important, but the
+    audience doesn't see it.
+  -->
+
+  <meta charset="UTF-8">
+  <!--
+    META CHARSET
+    ============
+    This tells the browser what character set to use.
+    UTF-8 supports almost every language and symbol (emojis too!).
+    Just always include this line. Don't overthink it.
+  -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+    META VIEWPORT
+    =============
+    This makes your page look good on phones and tablets.
+    Without it, mobile browsers might zoom out and make everything tiny.
+    Always include this line.
+  -->
+
+  <title>01 - Basic HTML Tags</title>
+  <!--
+    THE <title> TAG
+    ===============
+    This is the text that appears in the browser TAB at the top.
+    It does NOT appear on the page itself.
+    Try changing this text, save the file, and refresh -- look at your browser tab!
+  -->
+
+  <!-- Some basic styling so the page doesn't look completely plain -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+    .example-box {
+      background-color: #fff;
+      border: 2px solid #4CAF50;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .example-box h3 {
+      color: #4CAF50;
+      margin-top: 0;
+    }
+    .note {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 10px 15px;
+      margin: 15px 0;
+    }
+    code {
+      background-color: #e8e8e8;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+    hr {
+      border: none;
+      border-top: 2px solid #ddd;
+      margin: 30px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!--
+    THE <body> SECTION
+    ==================
+    Everything inside <body> is what the user ACTUALLY SEES on the page.
+    If <head> is backstage, <body> is the STAGE where the show happens.
+
+    All your content goes here: text, images, links, buttons, everything.
+  -->
+
+  <!-- ============================================================== -->
+  <!-- SECTION 1: HEADINGS                                            -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Lesson 1: Headings (h1 through h6)</h3>
+
+    <!--
+      HEADINGS: <h1> to <h6>
+      ======================
+      Headings are like titles and subtitles in a book.
+
+      <h1> is the BIGGEST and most important (like the book title)
+      <h2> is the chapter title
+      <h3> is a section within a chapter
+      ...and so on down to <h6> which is the smallest
+
+      IMPORTANT RULE: Every page should have only ONE <h1>.
+      Think of it as the main title of the page.
+    -->
+
+    <h1>This is an H1 - The Main Title</h1>
+    <!-- h1 = biggest heading. Use ONE per page. Like the title of a book. -->
+
+    <h2>This is an H2 - A Major Section</h2>
+    <!-- h2 = second biggest. Like chapter titles in a book. -->
+
+    <h3>This is an H3 - A Subsection</h3>
+    <!-- h3 = third biggest. Like sections within a chapter. -->
+
+    <h4>This is an H4 - A Sub-subsection</h4>
+    <!-- h4 = getting smaller now. Used less often. -->
+
+    <h5>This is an H5 - Even Smaller</h5>
+    <!-- h5 = rarely used in practice -->
+
+    <h6>This is an H6 - The Smallest Heading</h6>
+    <!-- h6 = smallest heading. Almost never used. -->
+
+    <div class="note">
+      <strong>Interview Tip:</strong> Headings are important for SEO (Search Engine Optimization)
+      and accessibility. Google reads your headings to understand your page content.
+      Screen readers use headings to help blind users navigate. Always use headings in order
+      (don't skip from h1 to h4).
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- SECTION 2: PARAGRAPHS AND TEXT                                 -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Lesson 2: Paragraphs and Text Formatting</h3>
+
+    <!--
+      THE <p> TAG - PARAGRAPHS
+      ========================
+      The <p> tag creates a paragraph of text.
+      The browser automatically adds some space above and below each paragraph.
+
+      Think of it like pressing Enter twice in a Word document.
+    -->
+
+    <p>This is a paragraph. It's the most basic way to put text on a page. Each paragraph
+    gets its own block of space. Notice how there's a gap between this paragraph and the next one?
+    That's automatic.</p>
+    <!-- Each <p> tag = one paragraph with automatic spacing -->
+
+    <p>This is a second paragraph. See the space between them? You didn't have to add that --
+    the browser does it automatically because each <code>&lt;p&gt;</code> is a separate block.</p>
+
+    <!--
+      TEXT FORMATTING TAGS
+      ====================
+      These tags change how text LOOKS within a paragraph.
+    -->
+
+    <p>
+      You can make text <strong>bold using the strong tag</strong>.
+      <!-- <strong> = bold text. Also tells screen readers "this is important" -->
+
+      You can make text <em>italic using the em tag</em>.
+      <!-- <em> = italic text. "em" stands for "emphasis" -->
+
+      You can even <strong><em>combine bold and italic</em></strong>.
+      <!-- You can nest tags inside each other! -->
+    </p>
+
+    <p>
+      The <code>&lt;br&gt;</code> tag creates a line break.<br>
+      See? This text is on a new line, but still in the same paragraph.<br>
+      It's like pressing Enter once (not twice).
+    </p>
+    <!--
+      THE <br> TAG - LINE BREAK
+      =========================
+      Notice something? <br> has NO closing tag. It's a "self-closing" tag.
+      Some tags don't need a closing tag because they don't wrap around content.
+      <br> just says "go to the next line" -- there's nothing to wrap.
+    -->
+
+    <div class="note">
+      <strong>Why &lt;strong&gt; instead of &lt;b&gt;?</strong> Both make text bold, but
+      <code>&lt;strong&gt;</code> also tells screen readers "this text is important."
+      Similarly, <code>&lt;em&gt;</code> is preferred over <code>&lt;i&gt;</code> for italics.
+      In interviews, use the "semantic" (meaningful) tags: strong and em.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- SECTION 3: LINKS                                               -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Lesson 3: Links (Anchor Tags)</h3>
+
+    <!--
+      THE <a> TAG - LINKS (ANCHORS)
+      ==============================
+      The <a> tag creates a clickable link.
+      "a" stands for "anchor" (an old term for links).
+
+      The HREF attribute tells the browser WHERE to go when clicked.
+      "href" stands for "Hypertext REFerence" -- basically the destination URL.
+
+      FORMAT: <a href="URL">Text the user sees</a>
+    -->
+
+    <p>
+      <a href="https://www.google.com">Click here to go to Google</a>
+      <!--
+        href="https://www.google.com" = the destination (where you go when you click)
+        "Click here to go to Google" = the text the user sees and clicks on
+      -->
+    </p>
+
+    <p>
+      <a href="https://www.google.com" target="_blank">Open Google in a new tab</a>
+      <!--
+        target="_blank" = opens the link in a NEW tab instead of replacing the current page
+        This is very commonly used so users don't lose their place.
+      -->
+    </p>
+
+    <p>
+      <a href="02-forms.html">Go to the Forms tutorial (file in same folder)</a>
+      <!--
+        You can link to OTHER HTML FILES in the same folder.
+        Just use the filename -- no need for a full URL.
+        This is how navigation works on websites!
+      -->
+    </p>
+
+    <p>
+      <a href="#section-images">Jump to the Images section below</a>
+      <!--
+        Links starting with # jump to a section ON THE SAME PAGE.
+        The # refers to an element with a matching "id" attribute.
+        We'll see the target element in the Images section below.
+      -->
+    </p>
+
+    <div class="note">
+      <strong>Interview Tip:</strong> Always know these <code>&lt;a&gt;</code> attributes:
+      <code>href</code> (the URL), <code>target="_blank"</code> (new tab),
+      and <code>rel="noopener noreferrer"</code> (security best practice when using target="_blank").
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- SECTION 4: IMAGES                                              -->
+  <!-- ============================================================== -->
+
+  <div class="example-box" id="section-images">
+    <!--
+      Notice the id="section-images" above?
+      That's what the # link from earlier points to.
+      When you click that link, the browser scrolls DOWN to this spot.
+    -->
+
+    <h3>Lesson 4: Images</h3>
+
+    <!--
+      THE <img> TAG - IMAGES
+      =======================
+      The <img> tag displays an image on the page.
+
+      IMPORTANT: <img> is a SELF-CLOSING tag (like <br>). No closing tag needed.
+
+      KEY ATTRIBUTES:
+        src = "source" - the URL or file path of the image
+        alt = "alternative text" - description shown if image fails to load
+              (also read by screen readers for blind users -- VERY important!)
+        width = how wide the image should be (in pixels)
+        height = how tall the image should be (in pixels)
+    -->
+
+    <p>Here's an image loaded from the internet:</p>
+    <img
+      src="https://via.placeholder.com/400x200/4CAF50/ffffff?text=I+am+an+image!"
+      alt="A green placeholder image that says 'I am an image'"
+      width="400"
+      height="200"
+    >
+    <!--
+      src = where the image comes from (a URL in this case)
+      alt = what to show/say if the image can't load
+      width/height = size in pixels
+
+      NOTE: If you see a broken image icon, that's okay -- it means the
+      placeholder service might be down. The ALT text will show instead.
+      That's exactly what alt is for!
+    -->
+
+    <p>If an image breaks, the alt text shows up:</p>
+    <img
+      src="this-image-does-not-exist.jpg"
+      alt="This image intentionally doesn't exist - see how the alt text shows up?"
+      width="400"
+      height="100"
+    >
+    <!--
+      This image will show as broken because the file doesn't exist.
+      The browser will display the alt text instead.
+      This is why alt text is important!
+    -->
+
+    <div class="note">
+      <strong>Interview Tip:</strong> ALWAYS include the <code>alt</code> attribute on images.
+      It's required for accessibility (helping blind users) and it's one of the most
+      common things interviewers check. An image without alt text is considered bad practice.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- SECTION 5: LISTS                                               -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Lesson 5: Lists</h3>
+
+    <!--
+      There are TWO main types of lists in HTML:
+
+      1. UNORDERED LIST (<ul>) - uses bullet points (dots)
+         Think: a grocery list where order doesn't matter
+
+      2. ORDERED LIST (<ol>) - uses numbers (1, 2, 3...)
+         Think: step-by-step instructions where order matters
+
+      Both use <li> (list item) for each item in the list.
+    -->
+
+    <h4>Unordered List (bullet points):</h4>
+    <ul>
+      <!--
+        <ul> = Unordered List (bullets, no numbers)
+        Use when the ORDER doesn't matter.
+        Like a shopping list -- it doesn't matter what you buy first.
+      -->
+      <li>Apples</li>     <!-- <li> = List Item. Each item in the list gets one. -->
+      <li>Bananas</li>
+      <li>Oranges</li>
+    </ul>
+
+    <h4>Ordered List (numbered):</h4>
+    <ol>
+      <!--
+        <ol> = Ordered List (numbers: 1, 2, 3...)
+        Use when the ORDER MATTERS.
+        Like recipe steps -- you must do step 1 before step 2.
+      -->
+      <li>Preheat the oven to 350 degrees</li>
+      <li>Mix the ingredients</li>
+      <li>Pour into a pan</li>
+      <li>Bake for 30 minutes</li>
+    </ol>
+
+    <h4>Nested Lists (a list inside a list):</h4>
+    <ul>
+      <li>Fruits
+        <ul>
+          <!-- You can put a list INSIDE a list item! This is called "nesting." -->
+          <li>Apples</li>
+          <li>Bananas</li>
+        </ul>
+      </li>
+      <li>Vegetables
+        <ul>
+          <li>Carrots</li>
+          <li>Broccoli</li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="note">
+      <strong>Common Mistake:</strong> Don't put content directly inside <code>&lt;ul&gt;</code>
+      or <code>&lt;ol&gt;</code>. Always wrap each item in <code>&lt;li&gt;</code> tags.
+      <br>Wrong: <code>&lt;ul&gt;Apple&lt;/ul&gt;</code>
+      <br>Right: <code>&lt;ul&gt;&lt;li&gt;Apple&lt;/li&gt;&lt;/ul&gt;</code>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- SECTION 6: DIVS AND SPANS                                      -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Lesson 6: Divs and Spans (Containers)</h3>
+
+    <!--
+      THE <div> TAG - DIVISION / CONTAINER
+      =====================================
+      A <div> is a generic CONTAINER. It's like a cardboard box.
+      By itself, it doesn't do anything visible. But you use it to GROUP
+      elements together so you can style them as a unit.
+
+      <div> is a BLOCK element -- it takes up the full width available
+      and starts on a new line.
+
+      Think of it like a new paragraph -- it stacks vertically.
+    -->
+
+    <div style="background-color: #e3f2fd; padding: 15px; margin: 10px 0; border-radius: 5px;">
+      <p>I'm inside a blue div!</p>
+      <p>Everything in this box is grouped together by the div.</p>
+      <!--
+        This div has a blue background. See how it wraps around BOTH paragraphs?
+        That's the power of div -- it groups things together so you can style
+        the whole group at once.
+      -->
+    </div>
+
+    <div style="background-color: #fce4ec; padding: 15px; margin: 10px 0; border-radius: 5px;">
+      <p>I'm inside a pink div!</p>
+      <p>This is a separate group from the blue one above.</p>
+    </div>
+
+    <!--
+      THE <span> TAG - INLINE CONTAINER
+      ===================================
+      A <span> is like a <div> but for INLINE content (within a line of text).
+      It doesn't start a new line. It wraps around words WITHIN a paragraph.
+
+      Think of it like a highlighter -- you use it to mark specific words
+      within a sentence, not to create a new block.
+    -->
+
+    <p>
+      In this sentence, <span style="color: red; font-weight: bold;">these words are red and bold</span>
+      because they're wrapped in a span with styling. The rest of the text is normal.
+    </p>
+    <!--
+      See how the span only affects "these words are red and bold"?
+      It doesn't create a new line or block. It's INLINE -- it flows
+      within the text like any other word.
+    -->
+
+    <div class="note">
+      <strong>DIV vs SPAN - The Simple Rule:</strong>
+      <br><code>&lt;div&gt;</code> = BOX (takes full width, starts new line) -- use for grouping sections
+      <br><code>&lt;span&gt;</code> = HIGHLIGHTER (inline, doesn't break the line) -- use for styling words within text
+      <br><br>
+      In Angular, you'll use <code>&lt;div&gt;</code> constantly for layout.
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- SECTION 7: SEMANTIC HTML                                       -->
+  <!-- ============================================================== -->
+
+  <div class="example-box">
+    <h3>Bonus: Semantic HTML (Know This for Interviews)</h3>
+
+    <!--
+      SEMANTIC HTML
+      =============
+      "Semantic" means "meaningful." Semantic HTML tags describe their content.
+      Instead of using <div> for everything, you can use tags that TELL the browser
+      (and other developers) what the content IS.
+
+      This is important for:
+      - Accessibility (screen readers understand the page better)
+      - SEO (Google understands your content better)
+      - Code readability (other developers understand your code faster)
+    -->
+
+    <p>Instead of using <code>&lt;div&gt;</code> for everything, use meaningful tags:</p>
+
+    <ul>
+      <li><code>&lt;header&gt;</code> - The top section of a page (logo, navigation)</li>
+      <li><code>&lt;nav&gt;</code> - Navigation links (menus)</li>
+      <li><code>&lt;main&gt;</code> - The main content of the page</li>
+      <li><code>&lt;section&gt;</code> - A thematic section of content</li>
+      <li><code>&lt;article&gt;</code> - Self-contained content (like a blog post)</li>
+      <li><code>&lt;aside&gt;</code> - Side content (like a sidebar)</li>
+      <li><code>&lt;footer&gt;</code> - The bottom section of a page (copyright, links)</li>
+    </ul>
+
+    <!--
+      These tags work EXACTLY like <div> visually.
+      The difference is they TELL the browser what the content means.
+
+      Think of it this way:
+        <div> is like a plain cardboard box with no label.
+        <header> is like a box labeled "HEADER STUFF."
+        Same box, but now you know what's inside without opening it.
+    -->
+
+    <div class="note">
+      <strong>Interview Tip:</strong> If an interviewer asks "What is semantic HTML?"
+      say: "Semantic HTML uses tags that describe the meaning of content, like
+      <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, and <code>&lt;footer&gt;</code>,
+      instead of generic <code>&lt;div&gt;</code> tags. It improves accessibility, SEO,
+      and code readability."
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ============================================================== -->
+  <!-- NAVIGATION TO NEXT FILE                                        -->
+  <!-- ============================================================== -->
+
+  <div style="text-align: center; padding: 20px;">
+    <h2>You finished Lesson 1!</h2>
+    <p>You now know the most important HTML tags. Next up: Forms!</p>
+    <p><a href="02-forms.html" style="font-size: 20px; color: #4CAF50;">Go to Lesson 2: Forms &rarr;</a></p>
+  </div>
+
+</body>
+</html>
