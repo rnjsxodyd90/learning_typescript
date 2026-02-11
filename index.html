@@ -105,6 +105,19 @@ th{background:var(--bg3);color:#7ec8e3}
 .reset-btn:hover{background:var(--accent);color:#fff}
 .cat-header{display:flex;align-items:center;gap:8px;margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .cat-header span{font-size:1.1rem;font-weight:600;color:var(--warn)}
+/* Try-it editor */
+.code-wrapper{position:relative}
+.try-btn{position:absolute;top:6px;right:6px;background:var(--accent2);color:#fff;border:none;border-radius:4px;padding:4px 10px;font-size:.7rem;cursor:pointer;z-index:1;opacity:.7;transition:.2s}
+.try-btn:hover{opacity:1}
+.try-panel{display:none;margin:-8px 0 12px;border:1px solid var(--accent2);border-radius:0 0 8px 8px;overflow:hidden}
+.try-panel.open{display:block}
+.try-panel-header{display:flex;justify-content:space-between;align-items:center;background:var(--accent2);padding:6px 12px}
+.try-panel-header span{color:#fff;font-size:.75rem;font-weight:600}
+.try-panel-header button{background:rgba(255,255,255,.2);color:#fff;border:none;border-radius:4px;padding:3px 10px;font-size:.7rem;cursor:pointer}
+.try-panel-header button:hover{background:rgba(255,255,255,.35)}
+.try-editor{width:100%;min-height:120px;background:var(--code-bg);color:var(--text);border:none;padding:14px;font-family:'Cascadia Code','Fira Code','Consolas',monospace;font-size:.85rem;resize:vertical;line-height:1.5;tab-size:2;outline:none}
+.try-output{background:#0a0e14;color:var(--success);padding:10px 14px;font-family:monospace;font-size:.8rem;min-height:28px;border-top:1px solid var(--border);white-space:pre-wrap}
+.try-output.error{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -1451,6 +1464,84 @@ function toggleSidebar() {
 function renderCheatSheet() {
   document.getElementById('cheatPanel').innerHTML = '<span class="close-btn" onclick="toggleCheat()">&times;</span>' + CHEAT_SHEET;
 }
+
+// Try-It Editor
+function addTryButtons() {
+  document.querySelectorAll('#main pre[class*="language-"]').forEach((pre, i) => {
+    if (pre.closest('.cheat-panel') || pre.querySelector('.try-btn')) return;
+    // Wrap pre
+    const wrapper = document.createElement('div');
+    wrapper.className = 'code-wrapper';
+    pre.parentNode.insertBefore(wrapper, pre);
+    wrapper.appendChild(pre);
+    // Add button
+    const btn = document.createElement('button');
+    btn.className = 'try-btn';
+    btn.textContent = 'Try It';
+    btn.onclick = function() { toggleTryPanel(wrapper, pre, i); };
+    wrapper.appendChild(btn);
+  });
+}
+
+function toggleTryPanel(wrapper, pre, id) {
+  let panel = wrapper.querySelector('.try-panel');
+  if (panel) { panel.classList.toggle('open'); return; }
+  // Create panel
+  panel = document.createElement('div');
+  panel.className = 'try-panel open';
+  // Strip type annotations for JS execution
+  const raw = pre.textContent;
+  const clean = raw.replace(/:\s*(string|number|boolean|void|any|unknown|User\[\]|User|Product|string\[\]|number\[\])\b/g, '')
+    .replace(/<[A-Za-z\[\],\s]+>/g, '');
+  panel.innerHTML = '<div class="try-panel-header"><span>Your Code</span><div><button onclick="runTryCode(this)">Run</button> <button onclick="clearTryOutput(this)">Clear</button></div></div>'
+    + '<textarea class="try-editor" spellcheck="false">' + escHtml(clean) + '</textarea>'
+    + '<div class="try-output">// output appears here</div>';
+  wrapper.appendChild(panel);
+  // Handle tab key in textarea
+  const ta = panel.querySelector('.try-editor');
+  ta.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const s = this.selectionStart, end = this.selectionEnd;
+      this.value = this.value.substring(0, s) + '  ' + this.value.substring(end);
+      this.selectionStart = this.selectionEnd = s + 2;
+    }
+  });
+}
+
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function runTryCode(btn) {
+  const panel = btn.closest('.try-panel');
+  const code = panel.querySelector('.try-editor').value;
+  const output = panel.querySelector('.try-output');
+  const logs = [];
+  const origLog = console.log;
+  console.log = function() {
+    logs.push([...arguments].map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' '));
+  };
+  try {
+    eval(code);
+    output.className = 'try-output';
+    output.textContent = logs.length ? logs.join('\n') : '// (no output — add console.log() to see results)';
+  } catch(e) {
+    output.className = 'try-output error';
+    output.textContent = 'Error: ' + e.message;
+  }
+  console.log = origLog;
+}
+
+function clearTryOutput(btn) {
+  const output = btn.closest('.try-panel').querySelector('.try-output');
+  output.className = 'try-output';
+  output.textContent = '// output appears here';
+}
+
+// Patch renderDay and renderDay7 to add try buttons after render
+const _origRenderDay = renderDay;
+renderDay = function(idx) { _origRenderDay(idx); addTryButtons(); };
+const _origRenderDay7 = renderDay7;
+renderDay7 = function() { _origRenderDay7(); addTryButtons(); };
 
 // INIT
 renderSidebar();
